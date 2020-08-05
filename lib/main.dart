@@ -48,7 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
   List data;
   String query;
   int selectedIndex;
+  final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
+  final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
 
   void changeQuery(String text){
     query = myController.text;
@@ -56,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String> getData() async {
+    if(query.length >= 1 && query != Null){
     var response = await http.get(
         Uri.encodeFull("https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword="+query),
         headers: {"Accept": "application/json"});
@@ -65,6 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
       print(data);
     });
     return "Success";
+    }else{
+      globalKey.currentState.showSnackBar(snackbarQuery);
+    }
   }
 
   @override
@@ -76,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: globalKey,
       appBar: AppBar(
         title: Text("Flutter Api Example"),
       ),
