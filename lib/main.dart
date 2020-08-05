@@ -77,6 +77,35 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     getData();
+    selectedIndex = 0;
+  }
+
+  Column _indexManager(){
+    switch(selectedIndex){
+      case 0:
+        return Column(
+          children: <Widget>[Icon(Icons.home)],
+        );
+      break;
+
+      case 1:
+        return Column(
+                children: <Widget>[
+                      Container(
+                        child:  TextField(controller: myController, onSubmitted: changeQuery,),
+                      ),
+                      Expanded(
+                        child: getList(),
+                      )
+                    ],
+                );
+      break;
+      case 2:
+        return Column(
+          children: <Widget>[Icon(Icons.settings)],
+        );
+      break;
+    }
   }
 
   @override
@@ -86,21 +115,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text("Flutter Api Example"),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            child:  TextField(controller: myController, onSubmitted: changeQuery,),
-          ),
-          Expanded(
-            child: getList(),
-          )
-        ],
-      ),
+      body: _indexManager(),
       bottomNavigationBar: FFNavigationBar(
         theme: FFNavigationBarTheme(
           barBackgroundColor: Colors.white,
-          selectedItemBorderColor: Colors.yellow,
-          selectedItemBackgroundColor: Colors.green,
+          selectedItemBorderColor: Colors.indigo,
+          selectedItemBackgroundColor: Colors.indigo,
           selectedItemIconColor: Colors.white,
           selectedItemLabelColor: Colors.black,
         ),
@@ -112,24 +132,16 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         items: [
           FFNavigationBarItem(
-            iconData: Icons.calendar_today,
-            label: 'Schedule',
+            iconData: Icons.home,
+            label: 'Home',
           ),
           FFNavigationBarItem(
-            iconData: Icons.people,
-            label: 'Contacts',
-          ),
-          FFNavigationBarItem(
-            iconData: Icons.attach_money,
-            label: 'Bills',
-          ),
-          FFNavigationBarItem(
-            iconData: Icons.note,
-            label: 'Notes',
+            iconData: Icons.search,
+            label: 'Cerca',
           ),
           FFNavigationBarItem(
             iconData: Icons.settings,
-            label: 'Settings',
+            label: 'Impostazioni',
           ),
         ],
       ),
