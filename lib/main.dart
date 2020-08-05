@@ -172,9 +172,22 @@ class _MyHomePageState extends State<MyHomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text(data[i][0]),
-                            Spacer(),
-                            Text('test'),
+                            Flexible(
+                              child: new Container(
+                                margin: EdgeInsets.only(left: 15,bottom: 150),
+                                child: new Text(
+                                  data[i][0],
+                                  overflow: TextOverflow.clip,
+                                  style: new TextStyle(
+                                    fontSize: 18.0,
+                                    fontFamily: 'Roboto',
+                                    color: new Color(0xFF212121),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+
                             SizedBox(
                               width: 10,
                             ),
