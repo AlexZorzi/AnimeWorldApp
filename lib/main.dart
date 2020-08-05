@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 
 void main() => runApp(MyApp());
@@ -185,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                         Row(
-                          children: <Widget>[Text('super')],
+                          children: data[i][3],
                         )
                       ],
                     ))

@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:html/dom.dart';
 
 
 List Parsehtml(html_search_api){
@@ -12,10 +12,18 @@ List Parsehtml(html_search_api){
     var a = link.attributes["href"];
     var img = div.getElementsByTagName("img")[0].attributes["src"];
     var genre_html = div.getElementsByTagName("a");
-    List<String> genre = [];
+    List<Widget> genre = [];
     for(var gen in genre_html){
       if(gen.attributes["href"].contains("genre")){
-        genre.add(gen.text);
+        genre.add(
+          Chip(
+            avatar: CircleAvatar(
+              backgroundColor: Colors.cyan,
+              child: Icon(Icons.info_outline),
+            ),
+            label: Text(gen.text),
+          )
+        );
       }
     }
 
