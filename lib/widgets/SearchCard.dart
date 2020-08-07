@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../pages/animeInfo.dart';
 class SearchCard extends StatelessWidget {
   SearchCard({Key key, this.dataSearch}) : super(key: key);
 
@@ -9,14 +9,14 @@ class SearchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var Title = dataSearch[0];
     var Link = dataSearch[1];
-    var LinkImage = dataSearch[2];
+    var imageLink = dataSearch[2];
     var Chips = dataSearch[3];
 
     return Card(
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: Title,Link: Link,imageLink: imageLink),),);},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[
@@ -31,7 +31,7 @@ class SearchCard extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Image(
-                                image: NetworkImage(LinkImage),
+                                image: NetworkImage(imageLink),
                                 width: 150,),
                               SizedBox(
                                 height: 10,

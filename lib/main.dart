@@ -7,6 +7,9 @@ import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'widgets/SearchCard.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'widgets/homepage.dart';
+import 'pages/animeInfo.dart';
+
+
 
 void main() => runApp(MyApp());
 

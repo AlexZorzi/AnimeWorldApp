@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
+import '../pages/animeInfo.dart';
 class homepageitem extends StatelessWidget {
   final dataHomepage;
   /*
@@ -20,7 +20,7 @@ class homepageitem extends StatelessWidget {
     String imageLink = dataHomepage[2];
     String episodeNumber = dataHomepage[3];
     return GestureDetector(
-      onTap: () {},
+      onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: Title,Link: Link,imageLink: imageLink,)));},
       child: Container(
         width: MediaQuery.of(context).size.width / 2.5,
         margin: EdgeInsets.only(right: 15,left: 15),
@@ -53,7 +53,6 @@ class homepageitem extends StatelessWidget {
                   color: Colors.black45,
                 ),
                 child: Text(
-                  // "${movieList[id]['title']}",
                   Title,
                   style: TextStyle(
                     color: Colors.white,
