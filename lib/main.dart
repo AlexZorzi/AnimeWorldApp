@@ -129,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
-        title: Text("Flutter Api Example"),
+        title: Text("AnimeWorld very legit"),
       ),
       body: _indexManager(),
       bottomNavigationBar: FFNavigationBar(
@@ -196,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return GridView.count(
           crossAxisCount: 2,
           crossAxisSpacing: 20.0,
-          mainAxisSpacing: 10.0,
+          mainAxisSpacing: 20.0,
           shrinkWrap: true,
           children: List.generate(dataHomepage.length, (index) {
                    return homepageitem(dataHomepage: dataHomepage[index],);

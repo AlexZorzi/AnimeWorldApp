@@ -16,49 +16,58 @@ class homepageitem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String Title = dataHomepage[0];
-    String Link = dataHomepage[0];
-    String imageLink = dataHomepage[0];
-    String episodeNumber = dataHomepage[0];
-      return   AnimatedContainer(
-        margin: EdgeInsets.fromLTRB(8, 4, 4, 4),
-        duration: Duration(milliseconds: 300),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(Title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            Text(
-              Title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(children: <Widget>[
-                      Icon(
-                        Icons.photo,
-                        size: 18,
-                      ),
-                      Text(' ' + episodeNumber + ' Page',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w500)),
-                    ]),
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
-                        child: Text("idk ", style: TextStyle(fontSize: 13))),
-                  ],
-                ),
-              ),
-            ),
+    String Link = dataHomepage[1];
+    String imageLink = dataHomepage[2];
+    String episodeNumber = dataHomepage[3];
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: MediaQuery.of(context).size.width / 2.5,
+        margin: EdgeInsets.only(right: 15,left: 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 5.0, color: Colors.grey[400], offset: Offset(0, 3))
           ],
         ),
-      );
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image(image: NetworkImage(imageLink),fit: BoxFit.cover,)
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15),
+                  ),
+                  color: Colors.black45,
+                ),
+                child: Text(
+                  // "${movieList[id]['title']}",
+                  Title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 23,
+                  ),
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
