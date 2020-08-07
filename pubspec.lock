@@ -118,6 +118,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.1"
+  flutter_staggered_animations:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_animations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -282,6 +289,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smart_grid_view:
+    dependency: "direct main"
+    description:
+      name: smart_grid_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   source_span:
     dependency: transitive
     description:
