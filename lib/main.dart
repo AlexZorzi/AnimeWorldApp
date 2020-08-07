@@ -4,7 +4,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
-
+import 'widgets/SearchCard.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'widgets/homepage.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
         bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
       )),
-      home: MyHomePage(title: 'Flutter Api Call'),
+      home: MyHomePage(title: 'AnimeWorld App'),
     );
   }
 }
@@ -45,66 +47,80 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List data;
+  List dataSearch;
+  List dataHomepage;
   String query;
   int selectedIndex;
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
 
-  void changeQuery(String text){
+  void changeQuery(String text) {
     query = myController.text;
-    getData();
+    getData_Search();
   }
 
-  Future<String> getData() async {
-    if(query.length >= 1 && query != Null){
-    var response = await http.get(
-        Uri.encodeFull("https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword="+query),
-        headers: {"Accept": "application/json"});
+  Future<String> getData_Search() async {
+    if (query.length >= 1 && query != Null) {
+      var response = await http.get(
+          Uri.encodeFull(
+              "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
+                  query),
+          headers: {"Accept": "application/json"});
 
-    setState(() {
-      data = Parsehtml(json.decode(response.body)['html']);
-      print(data);
-    });
-    return "Success";
-    }else{
+      setState(() {
+        dataSearch = Parsehtml_search(json.decode(response.body)['html']);
+        print(dataSearch);
+      });
+      return "Success";
+    } else {
       globalKey.currentState.showSnackBar(snackbarQuery);
     }
+  }
+
+  Future<String> getData_Homepage() async {
+    var response = await http.get(
+        Uri.encodeFull("https://www.animeworld.tv/"));
+
+    setState(() {
+      dataHomepage = Parsehtml_homepage(response.body);
+    });
+    return "Success";
   }
 
   @override
   void initState() {
     super.initState();
-    getData();
+    getData_Homepage();
     selectedIndex = 0;
   }
 
-  Column _indexManager(){
-    switch(selectedIndex){
+  Column _indexManager() {
+    switch (selectedIndex) {
       case 0:
         return Column(
-          children: <Widget>[Icon(Icons.home)],
+          children: <Widget>[Expanded(child: getList_Home())],
         );
-      break;
+        break;
 
       case 1:
         return Column(
-                children: <Widget>[
-                      Container(
-                        child:  TextField(controller: myController, onSubmitted: changeQuery,),
-                      ),
-                      Expanded(
-                        child: getList(),
-                      )
-                    ],
-                );
-      break;
+          children: <Widget>[
+            Container(
+              child: TextField(
+                controller: myController, onSubmitted: changeQuery,),
+            ),
+            Expanded(
+              child: getList_Search(),
+            )
+          ],
+        );
+        break;
       case 2:
         return Column(
           children: <Widget>[Icon(Icons.settings)],
         );
-      break;
+        break;
     }
   }
 
@@ -149,18 +165,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget getList() {
-    if (data == null || data.length < 1) {
+  Widget getList_Search() {
+    if (dataSearch == null || dataSearch.length < 1) {
       return Container(
         child: Center(
-          child: Icon(Icons.search,size: 50, color: Colors.black12,),
+          child: Icon(Icons.search, size: 50, color: Colors.black12,),
         ),
       );
     }
     return ListView.separated(
-      itemCount: data?.length,
+      itemCount: dataSearch?.length,
       itemBuilder: (BuildContext context, int index) {
-        return getListItem(index);
+        return SearchCard(dataSearch: dataSearch[index]);
       },
       separatorBuilder: (context, index) {
         return Divider();
@@ -168,63 +184,24 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget getListItem(int i) {
-    print(data[i][0]);
-    if (data == null || data.length < 1) return null;
 
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: EdgeInsets.all(7),
-        child: Stack(children: <Widget>[
-          Align(
-            alignment: Alignment.centerRight,
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 5),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Image(image: NetworkImage(data[i][2]),width: 150,),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Flexible(
-                              child: new Container(
-                                margin: EdgeInsets.only(left: 15,bottom: 150),
-                                child: new Text(
-                                  data[i][0],
-                                  overflow: TextOverflow.clip,
-                                  style: new TextStyle(
-                                    fontSize: 18.0,
-                                    fontFamily: 'Roboto',
-                                    color: new Color(0xFF212121),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                              width: 20,
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: data[i][3],
-                        )
-                      ],
-                    ))
-              ],
-            ),
-          )
-        ]),
-      ),
-    );
+  Widget getList_Home() {
+    if (dataHomepage == null || dataHomepage.length < 1) {
+      return Container(
+        child: Center(
+          child: Icon(Icons.search, size: 50, color: Colors.black12,),
+        ),
+      );
+    }
+      return GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 20.0,
+          mainAxisSpacing: 10.0,
+          shrinkWrap: true,
+          children: List.generate(dataHomepage.length, (index) {
+                   return homepageitem(dataHomepage: dataHomepage[index],);
+              },
+          ),
+      );
   }
 }
