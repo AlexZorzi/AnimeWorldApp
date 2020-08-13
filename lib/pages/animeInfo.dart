@@ -91,9 +91,9 @@ class _AnimeInfoState extends State<AnimeInfo> {
       );
     }
     return ListView.separated(
-      itemCount: dataInfo[5]?.length,
+      itemCount: dataInfo[5][0]?.length,
       itemBuilder: (BuildContext context, int index) {
-        return EpisodeCard(episodeNumber: dataInfo[5][index][0], episodeLink: dataInfo[5][index][1],);
+        return EpisodeCard(episodeNumber: dataInfo[5][0][index][0], episodeLink: dataInfo[5][0][index][1],eparray: dataInfo[5],);
       },
       separatorBuilder: (context, index) {
         return Divider();
