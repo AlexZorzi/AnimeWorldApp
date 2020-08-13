@@ -9,7 +9,7 @@ List Parsehtml_search(html_search_api){
   for(var div in divs){
     var link = div.getElementsByTagName("a")[1];
     var name = link.text;
-    var a = link.attributes["href"];
+    var a = "/"+link.attributes["href"];
     var img = div.getElementsByTagName("img")[0].attributes["src"];
     var genre_html = div.getElementsByTagName("a");
     List<Widget> genre = [];
@@ -48,21 +48,22 @@ List Parsehtml_homepage(html_search_api){
 
 List Parsehtml_animeinfo(html_search_api) {
   final htmldoc = parse(html_search_api);
-  var divs = htmldoc.getElementsByClassName("episodes range active");
+  var divs = htmldoc.getElementsByClassName("server active")[0].getElementsByClassName("episodes range active")[0].getElementsByClassName("episode");
   var episodes = [];
   var genre = [];
   var desc = htmldoc.getElementsByClassName("desc")[0].text;
   var rating = htmldoc.getElementById("average-vote").text;
   var lenghteps = htmldoc.getElementsByTagName("dl")[1].children[3].text;
-  var status = htmldoc.getElementsByTagName("dl")[1].children[3].text;
+  var status = htmldoc.getElementsByTagName("dl")[1].getElementsByTagName("a")[0].text;
   for (var gen in htmldoc.getElementsByTagName("dl")[0].children[11].getElementsByTagName("a")) {
     genre.add(gen.text);
   }
   for (var ep in divs) {
-    var epid = ep.firstChild.attributes["data-id"];
-    var epnumber = ep.firstChild.attributes["data-episode-num"];
+    var epid = ep.getElementsByTagName("a")[0].attributes["data-id"];
+    var epnumber = ep.getElementsByTagName("a")[0].attributes["data-episode-num"];
     episodes.add([epnumber,epid]);
   }
 
-  return [episodes,genre,desc,rating,lenghteps,status];
+  print(genre);
+  return [rating,lenghteps,status,desc,genre,episodes];
 }
