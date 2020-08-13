@@ -48,7 +48,7 @@ List Parsehtml_homepage(html_search_api){
 
 List Parsehtml_animeinfo(html_search_api) {
   final htmldoc = parse(html_search_api);
-  var divs = htmldoc.getElementsByClassName("server active")[0].getElementsByClassName("episodes range active")[0].getElementsByClassName("episode");
+  var divs = htmldoc.getElementsByClassName("server active")[0].getElementsByClassName("episodes range");
   var episodes = [];
   var genre = [];
   var desc = htmldoc.getElementsByClassName("desc")[0].text;
@@ -58,10 +58,12 @@ List Parsehtml_animeinfo(html_search_api) {
   for (var gen in htmldoc.getElementsByTagName("dl")[0].children[11].getElementsByTagName("a")) {
     genre.add(gen.text);
   }
-  for (var ep in divs) {
-    var epid = ep.getElementsByTagName("a")[0].attributes["data-id"];
-    var epnumber = ep.getElementsByTagName("a")[0].attributes["data-episode-num"];
-    episodes.add([epnumber,epid]);
+  for (var eprange in divs) {
+    for(var ep in eprange.getElementsByClassName("episode")){
+      var epid = ep.getElementsByTagName("a")[0].attributes["data-id"];
+      var epnumber = ep.getElementsByTagName("a")[0].attributes["data-episode-num"];
+      episodes.add([epnumber,epid]);
+    }
   }
 
   print(genre);
