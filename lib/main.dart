@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.light,
@@ -73,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
       setState(() {
         dataSearch = Parsehtml_search(json.decode(response.body)['html']);
-        print(dataSearch);
       });
       return "Success";
     } else {
