@@ -124,18 +124,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                           SizedBox(
                             height: 7.0,
                           ),
-                          RichText(
-                            text: TextSpan(
-                              children: List.generate(
-                                2,
-                                    (i) {
-                                  return TextSpan(
-                                      text: getData_Genres());
-                                },
-                              ),
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
+                          Text(getData_Genres(),style: Theme.of(context).textTheme.caption,),
                           SizedBox(height: 9.0),
                           SizedBox(height: 13.0),
                           Row(
