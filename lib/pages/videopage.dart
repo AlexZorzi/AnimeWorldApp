@@ -48,15 +48,22 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
       VideoPlayerController.network(Link),
     );
       return Scaffold(
-        body: FlickVideoPlayer(
-          flickManager: flickManager,
-          preferredDeviceOrientation: [
-            DeviceOrientation.landscapeRight,
-            DeviceOrientation.landscapeLeft
-          ],
-          systemUIOverlay: [],
-          flickVideoWithControls: FlickVideoWithControls(
-            controls: LandscapePlayerControls(),
+        backgroundColor: Colors.black,
+        body: Container(
+          alignment: Alignment.center,
+          child: AspectRatio(
+            aspectRatio: 16/9,
+            child: FlickVideoPlayer(
+              flickManager: flickManager,
+              preferredDeviceOrientation: [
+                DeviceOrientation.landscapeRight,
+                DeviceOrientation.landscapeLeft
+              ],
+              systemUIOverlay: [],
+              flickVideoWithControls: FlickVideoWithControls(
+                controls: LandscapePlayerControls(),
+              ),
+            ),
           ),
         ),
       );
