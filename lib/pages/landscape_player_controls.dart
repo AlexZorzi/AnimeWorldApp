@@ -140,6 +140,7 @@ class LandscapePlayerControls extends StatelessWidget {
             child: Icon(
               Icons.cancel,
               size: 30,
+              color: Colors.white38,
             ),
           ),
         ),

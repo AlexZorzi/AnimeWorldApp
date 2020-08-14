@@ -81,6 +81,5 @@ List Parsehtml_animeinfo(html_search_api) {
     genre.add(gen.text);
   }
 
-
   return [rating,lenghteps,status,desc,genre,episodes];
 }
