@@ -5,13 +5,24 @@ import 'dart:convert';
 import 'functions/html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'widgets/SearchCard.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'widgets/homepage.dart';
 import 'pages/animeInfo.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/foundation.dart';
+import 'widgets/FavoriteCard.dart';
 
 
 
-void main() => runApp(MyApp());
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  var document = await getApplicationDocumentsDirectory();
+  Hive.init(document.path);
+  await Hive.openBox<Map>("favorites");
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -55,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List dataHomepage;
   String query;
   int selectedIndex;
+  Box<Map> favorites;
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
@@ -94,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    favorites = Hive.box<Map>("favorites");
     getData_Homepage();
     selectedIndex = 0;
   }
@@ -121,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case 2:
         return Column(
-          children: <Widget>[Icon(Icons.settings)],
+          children: <Widget>[Expanded(child: getFavorites(),)],
         );
         break;
     }
@@ -159,8 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Cerca',
           ),
           FFNavigationBarItem(
-            iconData: Icons.settings,
-            label: 'Impostazioni',
+            iconData: Icons.save,
+            label: 'Preferiti',
           ),
         ],
       ),
@@ -202,9 +215,31 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSpacing: 20.0,
           shrinkWrap: true,
           children: List.generate(dataHomepage.length, (index) {
-                   return homepageitem(dataHomepage: dataHomepage[index],);
+                   return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
               },
           ),
       );
+  }
+
+  Widget getFavorites(){
+    if (favorites.values.length < 1) {
+      return Container(
+        child: Center(
+          child: Icon(Icons.favorite, size: 50, color: Colors.black12,),
+        ),
+      );
+    }
+    return ListView.separated(
+      itemCount: favorites.values.length,
+      itemBuilder: (BuildContext context, int index) {
+        var anime = favorites.getAt(index);
+        print(favorites.values);
+        print(anime);
+        return FavoriteCard(Title: anime["title"], Link: anime["link"],imageLink: anime["imageLink"],);
+      },
+      separatorBuilder: (context, index) {
+        return Divider();
+      },
+    );
   }
 }

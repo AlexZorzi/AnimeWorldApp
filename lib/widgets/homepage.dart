@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../pages/animeInfo.dart';
+import '../functions/favoritemanager.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 class homepageitem extends StatelessWidget {
   final dataHomepage;
+  final Box<Map> favorites;
+
   /*
   dataHomepage[0] Title
   dataHomepage[1] Link
@@ -10,7 +15,7 @@ class homepageitem extends StatelessWidget {
   dataHomepage[3] Episode Number
   */
 
-  homepageitem({this.dataHomepage})
+  homepageitem({this.dataHomepage,this.favorites})
       : super(key: ObjectKey(dataHomepage));
 
   @override
@@ -19,8 +24,10 @@ class homepageitem extends StatelessWidget {
     String Link = dataHomepage[1];
     String imageLink = dataHomepage[2];
     String episodeNumber = dataHomepage[3];
+
     return GestureDetector(
       onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: Title,Link: Link,imageLink: imageLink,)));},
+      onLongPress: () {FavManager(Link, imageLink, Title, favorites); print(imageLink);},
       child: Container(
         width: MediaQuery.of(context).size.width / 2.5,
         margin: EdgeInsets.only(right: 15,left: 15),
