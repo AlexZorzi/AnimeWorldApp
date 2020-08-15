@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import '../pages/animeInfo.dart';
+import '../functions/favoritemanager.dart';
+import '../main.dart';
 class FavoriteCard extends StatelessWidget {
-  FavoriteCard({Key key, this.imageLink, this.Link, this.Title}) : super(key: key);
+  FavoriteCard({Key key, this.imageLink, this.Link, this.Title, this.favorites}) : super(key: key);
 
   final imageLink;
   final Link;
   final Title;
+  final favorites;
 
 
   @override
   Widget build(BuildContext context) {
-  print(imageLink);
     return Card(
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
         onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: Title, Link: Link,imageLink: imageLink),),);},
+        onLongPress: () {FavManager(Link, imageLink, Title, favorites); change();},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[

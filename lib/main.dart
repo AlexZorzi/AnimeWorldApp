@@ -235,11 +235,14 @@ class _MyHomePageState extends State<MyHomePage> {
         var anime = favorites.getAt(index);
         print(favorites.values);
         print(anime);
-        return FavoriteCard(Title: anime["title"], Link: anime["link"],imageLink: anime["imageLink"],);
+        return FavoriteCard(Title: anime["title"], Link: anime["link"],imageLink: anime["imageLink"],favorites: favorites,);
       },
       separatorBuilder: (context, index) {
         return Divider();
       },
     );
+  }
+  void changeofFavorites(){
+
   }
 }
