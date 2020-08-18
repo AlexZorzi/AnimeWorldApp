@@ -9,9 +9,8 @@ import 'widgets/homepage.dart';
 import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/foundation.dart';
-import 'widgets/FavoriteCard.dart';
+
 
 
 
@@ -70,6 +69,21 @@ class _MyHomePageState extends State<MyHomePage> {
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
+
+  void FavManager(String link, String imageLink, String title){
+    if(favorites.get("/play/"+link.split("/")[2]) == null){
+      setState(() {
+        favorites.put("/play/"+link.split("/")[2], {"link":"/play/"+link.split("/")[2], "imageLink":imageLink,"title":title});
+      });
+      print(title+" Added");
+    }else{
+      setState(() {
+        favorites.delete("/play/"+link.split("/")[2]);
+      });
+      print(title+" Deleted");
+
+    }
+  }
 
   void changeQuery(String text) {
     query = myController.text;
@@ -172,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Cerca',
           ),
           FFNavigationBarItem(
-            iconData: Icons.save,
+            iconData: Icons.favorite,
             label: 'Preferiti',
           ),
         ],
@@ -235,14 +249,76 @@ class _MyHomePageState extends State<MyHomePage> {
         var anime = favorites.getAt(index);
         print(favorites.values);
         print(anime);
-        return FavoriteCard(Title: anime["title"], Link: anime["link"],imageLink: anime["imageLink"],favorites: favorites,);
+        return FavoriteCardMethod(anime["title"], anime["link"],anime["imageLink"]);
       },
       separatorBuilder: (context, index) {
         return Divider();
       },
     );
   }
-  void changeofFavorites(){
 
+
+    FavoriteCardMethod(title, Link, imageLink){
+      return Card(
+        elevation: 5,
+        child: InkWell(
+          splashColor: Colors.indigoAccent,
+          onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: title, Link: Link,imageLink: imageLink),),);},
+          onLongPress: () {FavManager(Link, imageLink, title);},
+          child: Padding(
+            padding: EdgeInsets.all(7),
+            child: Stack(children: <Widget>[
+              Align(
+                alignment: Alignment.centerRight,
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(left: 10, top: 5),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Image(
+                                  image: NetworkImage(imageLink),
+                                  width: 50,),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Flexible(
+                                  child: new Container(
+                                    margin: EdgeInsets.only(
+                                        left: 15, bottom: 150),
+                                    child: new Text(
+                                      title,
+                                      overflow: TextOverflow.clip,
+                                      style: new TextStyle(
+                                        fontSize: 18.0,
+                                        fontFamily: 'Roboto',
+                                        color: new Color(0xFF212121),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                )
+                              ],
+                            ),
+
+                          ],
+                        ))
+                  ],
+                ),
+              )
+            ]),
+          ),
+        ),
+      );
+    }
   }
-}
+

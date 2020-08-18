@@ -4,6 +4,7 @@ import '../pages/animeInfo.dart';
 import '../functions/favoritemanager.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 class homepageitem extends StatelessWidget {
   final dataHomepage;
   final Box<Map> favorites;
