@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -10,7 +12,8 @@ import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:dio/dio.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 
 
@@ -20,6 +23,11 @@ void main() async{
   var document = await getApplicationDocumentsDirectory();
   Hive.init(document.path);
   await Hive.openBox<Map>("favorites");
+  await Hive.openBox<Map>("animedownload");
+
+  FlutterDownloader.initialize(
+      debug: true // optional: set false to disable printing logs to console
+  );
   runApp(MyApp());
 }
 
@@ -64,11 +72,35 @@ class _MyHomePageState extends State<MyHomePage> {
   List dataSearch;
   List dataHomepage;
   String query;
+  var downloadfiles;
   int selectedIndex;
   Box<Map> favorites;
+  Box<Map> animedownload;
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
+  String _localPath;
+
+  Future<String> _findLocalPath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+  void _requestDownload(url,pathanime,epnumber) async {
+    String _localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + pathanime;
+
+    final savedDir = Directory(_localPath);
+    bool hasExisted = await savedDir.exists();
+    print(savedDir.listSync());
+    if (!hasExisted) {
+      savedDir.create();
+    }
+    await FlutterDownloader.enqueue(
+        url: url,
+        fileName: epnumber,
+        savedDir: _localPath,
+        showNotification: true,
+        openFileFromNotification: true);
+  }
 
   void FavManager(String link, String imageLink, String title){
     if(favorites.get("/play/"+link.split("/")[2]) == null){
@@ -121,10 +153,19 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     favorites = Hive.box<Map>("favorites");
+    animedownload = Hive.box<Map>("animedownload");
+    print(animedownload.values);
+    refreshDownloads();
     getData_Homepage();
     selectedIndex = 0;
   }
 
+  void refreshDownloads() async{
+    var downloadpath =  (await _findLocalPath()) + Platform.pathSeparator + 'Download';
+    setState(() {
+      downloadfiles = Directory(downloadpath).listSync();
+      });
+  }
   Column _indexManager() {
     switch (selectedIndex) {
       case 0:
@@ -149,6 +190,11 @@ class _MyHomePageState extends State<MyHomePage> {
       case 2:
         return Column(
           children: <Widget>[Expanded(child: getFavorites(),)],
+        );
+        break;
+      case 3:
+        return Column(
+          children: <Widget>[Expanded(child: getDownloads(),)],
         );
         break;
     }
@@ -188,6 +234,10 @@ class _MyHomePageState extends State<MyHomePage> {
           FFNavigationBarItem(
             iconData: Icons.favorite,
             label: 'Preferiti',
+          ),
+          FFNavigationBarItem(
+            iconData: Icons.file_download,
+            label: 'Download',
           ),
         ],
       ),
@@ -319,6 +369,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       );
+    }
+
+    Widget getDownloads(){
+      return Text("test");
+
     }
   }
 

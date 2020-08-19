@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'landscape_player_controls.dart';
 
 class LandscapePlayer extends StatefulWidget {
