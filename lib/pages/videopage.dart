@@ -9,7 +9,7 @@ import 'landscape_player_controls.dart';
 class LandscapePlayer extends StatefulWidget {
   LandscapePlayer({Key key, this.RawLink}) : super(key: key);
 
-  final String RawLink;
+  final RawLink;
 
   @override
   _LandscapePlayerState createState() => _LandscapePlayerState();
@@ -17,14 +17,21 @@ class LandscapePlayer extends StatefulWidget {
 
 class _LandscapePlayerState extends State<LandscapePlayer> {
   FlickManager flickManager;
-  String Link;
+  var Link;
 
   @override
   void initState() {
     super.initState();
-    getData_Video();}
+    if(widget.RawLink is String){
+      getData_Video_web();
+    }else{
+      setState(() {
+        Link = widget.RawLink;
+      });
+    }
+  }
 
-  Future<String> getData_Video() async {
+  Future<String> getData_Video_web() async {
       var response = await http.get(
           Uri.encodeFull("https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
 
@@ -42,10 +49,18 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
   Widget get_video(){
     if(Link != null){
-    flickManager = FlickManager(
-      videoPlayerController:
-      VideoPlayerController.network(Link),
-    );
+
+        if(Link is String){
+          flickManager = FlickManager(
+            videoPlayerController:
+            VideoPlayerController.network(Link),
+          );
+        }else{
+          flickManager = FlickManager(
+            videoPlayerController:
+            VideoPlayerController.file(Link),
+          );
+        }
       return Scaffold(
         backgroundColor: Colors.black,
         body: Container(

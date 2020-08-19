@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-
+import 'pages/animedownloaded.dart';
 
 
 
@@ -372,8 +372,86 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     Widget getDownloads(){
-      return Text("test");
-
+      if (animedownload.values.length < 1) {
+        return Container(
+          child: Center(
+            child: Icon(Icons.favorite, size: 50, color: Colors.black12,),
+          ),
+        );
+      }
+      return ListView.separated(
+        itemCount: animedownload.values.length,
+        itemBuilder: (BuildContext context, int index) {
+          var anime = animedownload.getAt(index);
+          return DownloadCardMethod(anime["title"], anime["link"],anime["imageLink"]);
+        },
+        separatorBuilder: (context, index) {
+          return Divider();
+        },
+      );
     }
+  DownloadCardMethod(title, Link, imageLink){
+    return Card(
+      elevation: 5,
+      child: InkWell(
+        splashColor: Colors.indigoAccent,
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeDownloadDisplay(Title: title, Link: Link,imageLink: imageLink),),);},
+        onLongPress: () {FavManager(Link, imageLink, title);},
+        child: Padding(
+          padding: EdgeInsets.all(7),
+          child: Stack(children: <Widget>[
+            Align(
+              alignment: Alignment.centerRight,
+              child: Stack(
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 5),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(imageLink),
+                                width: 50,),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Flexible(
+                                child: new Container(
+                                  margin: EdgeInsets.only(
+                                      left: 15, bottom: 150),
+                                  child: new Text(
+                                    title,
+                                    overflow: TextOverflow.clip,
+                                    style: new TextStyle(
+                                      fontSize: 18.0,
+                                      fontFamily: 'Roboto',
+                                      color: new Color(0xFF212121),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              )
+                            ],
+                          ),
+
+                        ],
+                      ))
+                ],
+              ),
+            )
+          ]),
+        ),
+      ),
+    );
+  }
+
   }
 

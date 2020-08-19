@@ -14,19 +14,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 
 
-class AnimeInfo extends StatefulWidget {
+class AnimeDownloadDisplay extends StatefulWidget {
   final String Link;
   final String Title;
   final String imageLink;
 
-
-  const AnimeInfo({Key key, this.Title, this.Link, this.imageLink}) : super(key: key);
+  const AnimeDownloadDisplay({Key key, this.Title, this.Link, this.imageLink}) : super(key: key);
 
   @override
-  _AnimeInfoState createState() => _AnimeInfoState();
+  _AnimeDownloadDisplayState createState() => _AnimeDownloadDisplayState();
 }
 
-class _AnimeInfoState extends State<AnimeInfo> {
+class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
   Box<Map> animedownload;
   List dataInfo;
 
@@ -40,13 +39,13 @@ class _AnimeInfoState extends State<AnimeInfo> {
   }
 
   Future<String> getData_Info() async {
-      var response = await http.get(
-          Uri.encodeFull('https://www.animeworld.tv'+widget.Link));
+    var response = await http.get(
+        Uri.encodeFull('https://www.animeworld.tv'+widget.Link));
 
-      setState(() {
-        dataInfo = Parsehtml_animeinfo(response.body);
-      });
-      return "Success";
+    setState(() {
+      dataInfo = Parsehtml_animeinfo(response.body);
+    });
+    return "Success";
   }
 
   String getData_Genres(){
@@ -96,17 +95,21 @@ class _AnimeInfoState extends State<AnimeInfo> {
   }
 
   Widget getList_EpisodeList() {
-    if (dataInfo == null) {
+    var animedata = animedownload.get("/play/"+widget.Link.split("/")[2]);
+    if (animedata["episodes"] == null) {
       return Container(
         child: Center(
-          child: Icon(Icons.search, size: 50, color: Colors.black12,),
+          child: Icon(Icons.cloud_download, size: 50, color: Colors.black12,),
         ),
       );
     }
+
     return ListView.separated(
-      itemCount: dataInfo[5][0]?.length,
+      itemCount: animedata["episodes"].length,
       itemBuilder: (BuildContext context, int index) {
-        return GetEpisodeCard(dataInfo[5][0][index][0], dataInfo[5][0][index][1], dataInfo[5],);
+        var file = File(animedata["episodes"][(1+index).toString()]);
+        print(file);
+        return GetEpisodeCard((1+index).toString(), file);
       },
       separatorBuilder: (context, index) {
         return Divider();
@@ -120,98 +123,98 @@ class _AnimeInfoState extends State<AnimeInfo> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Image(image: NetworkImage(widget.imageLink),),
+              SizedBox(
+                height: 11,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Column(
                   children: <Widget>[
-                    Image(image: NetworkImage(widget.imageLink),),
+                    Text(
+                      widget.Title,
+                      style: Theme.of(context).textTheme.headline,
+                    ),
                     SizedBox(
-                      height: 11,
+                      height: 7.0,
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            widget.Title,
-                            style: Theme.of(context).textTheme.headline,
-                          ),
-                          SizedBox(
-                            height: 7.0,
-                          ),
-                          Text(getData_Genres(),style: Theme.of(context).textTheme.caption,),
-                          SizedBox(height: 9.0),
-                          SizedBox(height: 13.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    "Status",
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                  Text(
-                                    getData_Status(),
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    "Rating",
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                  Text(
-                                    getData_Rating(),
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    "Length",
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                  Text(
-                                    getData_Lenghteps(),
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 13.0),
-                          SizedBox(height: 13.0),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: SizedBox(
-                                  height: 200,
-                                  child: getList_EpisodeList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    // MyScreenshots(),
+                    Text(getData_Genres(),style: Theme.of(context).textTheme.caption,),
+                    SizedBox(height: 9.0),
                     SizedBox(height: 13.0),
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              "Status",
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            Text(
+                              getData_Status(),
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              "Rating",
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            Text(
+                              getData_Rating(),
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              "Length",
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            Text(
+                              getData_Lenghteps(),
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 13.0),
+                    SizedBox(height: 13.0),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: SizedBox(
+                            height: 200,
+                            child: getList_EpisodeList(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              )
+              ),
+              // MyScreenshots(),
+              SizedBox(height: 13.0),
+
+            ],
+          ),
+        )
         ,)
       ,);
   }
 
-  GetEpisodeCard(episodeNumber,episodeLink, eparray){
+  GetEpisodeCard(episodeNumber,episodeFile){
     return Card(
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: episodeLink,),),);},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: episodeFile,),),);},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[
@@ -252,7 +255,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                                         width: 30,
                                         child: InkWell(
                                           child: Icon(Icons.file_download),
-                                          onTap: (){pathrequest(episodeLink, widget.Link.split("/")[2].split(".")[0], episodeNumber);},
+                                          onTap: (){},
                                         ),
                                       )
                                     ],
@@ -274,9 +277,9 @@ class _AnimeInfoState extends State<AnimeInfo> {
   Future<String> getData_Video(RawLink) async {
     var response = await http.get(
         Uri.encodeFull("https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
-        var Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
-      print(Link);
-      return Link;
+    var Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
+    print(Link);
+    return Link;
   }
   Future<String> _findLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -288,11 +291,9 @@ class _AnimeInfoState extends State<AnimeInfo> {
     // The created directory is returned as a Future.
         .then((Directory directory) {
     });
-    DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
     await FlutterDownloader.enqueue(
 
         url: (await getData_Video(url)),
-        fileName: epnumber+".mp4",
         savedDir: localPath,
         showNotification: true,
         openFileFromNotification: true);
