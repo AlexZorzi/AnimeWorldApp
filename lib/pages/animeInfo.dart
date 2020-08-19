@@ -284,13 +284,12 @@ class _AnimeInfoState extends State<AnimeInfo> {
   }
   void pathrequest(url,animelink,epnumber) async {
     String localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + animelink;
-
-    new Directory(localPath).create()
+    new Directory(localPath).create(recursive: true)
     // The created directory is returned as a Future.
         .then((Directory directory) {
-      print(directory.path);
     });
     await FlutterDownloader.enqueue(
+
         url: (await getData_Video(url)),
         savedDir: localPath,
         showNotification: true,
