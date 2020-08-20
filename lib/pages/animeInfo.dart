@@ -187,8 +187,8 @@ class _AnimeInfoState extends State<AnimeInfo> {
                             children: <Widget>[
                               Expanded(
                                 child: SizedBox(
-                                  height: 200,
-                                  child: getList_EpisodeList(),
+                                  height: 300,
+                                  child: Container(color: Colors.white,height: 1000,child: getList_EpisodeList()),
                                 ),
                               ),
                             ],

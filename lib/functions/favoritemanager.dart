@@ -7,20 +7,25 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 void FavManager(String link, String imageLink, String title, Box<Map> hivebox){
-  if(hivebox.get("/play/"+link.split("/")[2]) == null){
-    hivebox.put("/play/"+link.split("/")[2], {"link":"/play/"+link.split("/")[2], "imageLink":imageLink,"title":title});
+  var animeid = link.split("/")[2].split(".")[0];
+  var animelink = "/play/"+link.split("/")[2];
+  if(hivebox.get(animeid) == null){
+    hivebox.put(animeid, {"link":animelink, "imageLink":imageLink,"title":title});
     print(title+" Added");
   }else{
-    hivebox.delete("/play/"+link.split("/")[2]);
+    hivebox.delete(animeid);
     print(title+" Deleted");
 
   }
 }
 void DownloadManager(String link, String imageLink, String title, Box<Map> hivebox, String epnumber, String eplink){
-  if(hivebox.get("/play/"+link.split("/")[2]) == null){
-    hivebox.put("/play/"+link.split("/")[2],
+  var animeid = link.split("/")[2].split(".")[0];
+  var animelink = "/play/"+link.split("/")[2];
+
+  if(hivebox.get(animeid) == null){
+    hivebox.put(animeid,
     {
-      'link' : link,
+      'link' : animelink,
       'title': title,
       'imageLink': imageLink,
       'episodes' : {epnumber: eplink}
@@ -28,12 +33,12 @@ void DownloadManager(String link, String imageLink, String title, Box<Map> hiveb
     );
     print(title+" Added (downloadmanager)");
   }
-  else if(!hivebox.get("/play/"+link.split("/")[2])["episodes"].containsKey(epnumber)){
-    var episodes = hivebox.get("/play/"+link.split("/")[2])["episodes"];
+  else if(!hivebox.get(animeid)["episodes"].containsKey(epnumber)){
+    var episodes = hivebox.get(animeid)["episodes"];
     episodes[epnumber] = eplink;
-          hivebox.put("/play/"+link.split("/")[2],
+          hivebox.put(animeid,
               {
-                'link' : link,
+                'link' : animelink,
                 'title': title,
                 'imageLink': imageLink,
                 'episodes' : episodes
@@ -43,18 +48,19 @@ void DownloadManager(String link, String imageLink, String title, Box<Map> hiveb
           print(title+" Added (downloadmanager)");
 
   }
-  else if(hivebox.get("/play/"+link.split("/")[2])["episodes"].containsKey(epnumber)){
-    var episodes = hivebox.get("/play/"+link.split("/")[2])["episodes"];
+  else if(hivebox.get(animeid)["episodes"].containsKey(epnumber)){
+    var episodes = hivebox.get(animeid)["episodes"];
     episodes.remove(epnumber);
-    hivebox.put(link.split("/")[2],
+    hivebox.put(animeid,
         {
-          'link' : link,
+          'link' : animelink,
           'title': title,
           'imageLink': imageLink,
           'episodes' : episodes
         }
     );
-    if(hivebox.get("/play/"+link.split("/")[2])["episodes"].values.length == 0){hivebox.delete("/play/"+link.split("/")[2]);}
+
+    if(hivebox.get(animeid)["episodes"].values.length == 0){hivebox.delete(animeid);}
     print(title+" Deleted (downloadmanager)");
 
   }

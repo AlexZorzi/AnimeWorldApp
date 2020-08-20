@@ -57,6 +57,10 @@ class MyApp extends StatelessWidget {
       home: MyHomePage(title: 'AnimeWorld App'),
     );
   }
+
+  void test(){
+    print("ciao");
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -375,7 +379,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (animedownload.values.length < 1) {
         return Container(
           child: Center(
-            child: Icon(Icons.favorite, size: 50, color: Colors.black12,),
+            child: Icon(Icons.file_download, size: 50, color: Colors.black12,),
           ),
         );
       }

@@ -31,6 +31,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
 
   @override
   void initState() {
+
     super.initState();
     getData_Info();
     animedownload = Hive.box<Map>("animedownload");
@@ -95,8 +96,8 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
   }
 
   Widget getList_EpisodeList() {
-    var animedata = animedownload.get("/play/"+widget.Link.split("/")[2]);
-    if (animedata["episodes"] == null) {
+    var animedata = animedownload.get(widget.Link.split("/")[2].split(".")[0]);
+    if (animedata == null) {
       return Container(
         child: Center(
           child: Icon(Icons.cloud_download, size: 50, color: Colors.black12,),
@@ -107,9 +108,9 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
     return ListView.separated(
       itemCount: animedata["episodes"].length,
       itemBuilder: (BuildContext context, int index) {
-        var file = File(animedata["episodes"][(1+index).toString()]);
-        print(file);
-        return GetEpisodeCard((1+index).toString(), file);
+        var keys = animedata["episodes"].keys.toList();
+        var filepath = animedata["episodes"][keys[index]];
+        return GetEpisodeCard(keys[index],filepath);
       },
       separatorBuilder: (context, index) {
         return Divider();
@@ -190,7 +191,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
                       children: <Widget>[
                         Expanded(
                           child: SizedBox(
-                            height: 200,
+                            height: 300,
                             child: getList_EpisodeList(),
                           ),
                         ),
@@ -210,93 +211,95 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
   }
 
   GetEpisodeCard(episodeNumber,episodeFile){
-    return Card(
-      elevation: 5,
-      child: InkWell(
-        splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: episodeFile,),),);},
-        child: Padding(
-          padding: EdgeInsets.all(7),
-          child: Stack(children: <Widget>[
-            Align(
-              alignment: Alignment.centerRight,
-              child: Stack(
-                children: <Widget>[
-                  Padding(
-                      padding: const EdgeInsets.only(left: 10, top: 5),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Flexible(
-                                child: new Container(
-                                  margin: EdgeInsets.only(
-                                      left: 15, bottom: 15),
-                                  child: Row(
-                                    children: <Widget>[
-                                      new Text(
-                                        "Episodio "+episodeNumber,
-                                        overflow: TextOverflow.clip,
-                                        style: new TextStyle(
-                                          fontSize: 18.0,
-                                          fontFamily: 'Roboto',
-                                          color: new Color(0xFF212121),
-                                          fontWeight: FontWeight.bold,
+    if(episodeFile != null) {
+      return Card(
+        elevation: 5,
+        child: InkWell(
+          splashColor: Colors.indigoAccent,
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => LandscapePlayer(RawLink: episodeFile,),),);
+          },
+          child: Padding(
+            padding: EdgeInsets.all(7),
+            child: Stack(children: <Widget>[
+              Align(
+                alignment: Alignment.centerRight,
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(left: 10, top: 5),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Flexible(
+                                  child: new Container(
+                                    margin: EdgeInsets.only(
+                                        left: 15, bottom: 15),
+                                    child: Row(
+                                      children: <Widget>[
+                                        new Text(
+                                          "Episodio " + episodeNumber,
+                                          overflow: TextOverflow.clip,
+                                          style: new TextStyle(
+                                            fontSize: 18.0,
+                                            fontFamily: 'Roboto',
+                                            color: new Color(0xFF212121),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 190,
-                                      ),
-                                      Container(
-                                        height: 30,
-                                        width: 30,
-                                        child: InkWell(
-                                          child: Icon(Icons.file_download),
-                                          onTap: (){},
+                                        SizedBox(
+                                          width: 190,
                                         ),
-                                      )
-                                    ],
+                                        Container(
+                                          height: 30,
+                                          width: 30,
+                                          child: InkWell(
+                                            child: Icon(Icons.delete),
+                                            onTap: () {
+                                              deleterequest(
+                                                  widget.Link.split("/")[2]
+                                                      .split(".")[0],
+                                                  episodeNumber);
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ))
-                ],
-              ),
-            )
-          ]),
+                              ],
+                            ),
+                          ],
+                        ))
+                  ],
+                ),
+              )
+            ]),
+          ),
         ),
-      ),
-    );
-  }
-  Future<String> getData_Video(RawLink) async {
-    var response = await http.get(
-        Uri.encodeFull("https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
-    var Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
-    print(Link);
-    return Link;
+      );
+    }
   }
   Future<String> _findLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
   }
-  void pathrequest(url,animelink,epnumber) async {
+  void deleterequest(animelink,epnumber) async {
     String localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + animelink;
     new Directory(localPath).create(recursive: true)
     // The created directory is returned as a Future.
         .then((Directory directory) {
     });
-    await FlutterDownloader.enqueue(
-
-        url: (await getData_Video(url)),
-        savedDir: localPath,
-        showNotification: true,
-        openFileFromNotification: true);
+    print(animedownload.get("/play/"+widget.Link.split("/")[2]));
+    setState(() {
+      File(localPath+"/"+epnumber+".mp4").delete();
+      DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
+    });
   }
 
 }
