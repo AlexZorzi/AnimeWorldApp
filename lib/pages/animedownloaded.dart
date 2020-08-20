@@ -105,12 +105,19 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
       );
     }
 
+    var keys = animedata["episodes"].keys.toList();
+    List<int> sortedkeys = [];
+    for(var key in keys){
+      sortedkeys.add(int.parse(key));
+    }
+    sortedkeys.sort();
+
     return ListView.separated(
       itemCount: animedata["episodes"].length,
       itemBuilder: (BuildContext context, int index) {
-        var keys = animedata["episodes"].keys.toList();
-        var filepath = animedata["episodes"][keys[index]];
-        return GetEpisodeCard(keys[index],filepath);
+
+        var filepath = animedata["episodes"][sortedkeys[index].toString()];
+        return GetEpisodeCard(sortedkeys[index].toString(),File(filepath));
       },
       separatorBuilder: (context, index) {
         return Divider();

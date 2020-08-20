@@ -49,7 +49,6 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
   Widget get_video(){
     if(Link != null){
-
         if(Link is String){
           flickManager = FlickManager(
             videoPlayerController:
