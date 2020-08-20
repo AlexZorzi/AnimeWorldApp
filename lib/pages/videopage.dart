@@ -5,11 +5,16 @@ import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'landscape_player_controls.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+
 
 class LandscapePlayer extends StatefulWidget {
-  LandscapePlayer({Key key, this.RawLink}) : super(key: key);
+  LandscapePlayer({Key key, this.RawLink, this.epnumber, this.animeid}) : super(key: key);
 
   final RawLink;
+  final epnumber;
+  final animeid;
 
   @override
   _LandscapePlayerState createState() => _LandscapePlayerState();
@@ -18,10 +23,16 @@ class LandscapePlayer extends StatefulWidget {
 class _LandscapePlayerState extends State<LandscapePlayer> {
   FlickManager flickManager;
   var Link;
+  int Seeked;
+  Box<Map> timestamps;
 
   @override
   void initState() {
     super.initState();
+    Seeked = 0;
+    timestamps = Hive.box<Map>("timestamps");
+    print("HEY");
+    print(timestamps.get(widget.animeid));
     if(widget.RawLink is String){
       getData_Video_web();
     }else{
@@ -29,6 +40,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
         Link = widget.RawLink;
       });
     }
+
   }
 
   Future<String> getData_Video_web() async {
@@ -40,26 +52,52 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
         print(Link);
       });
   }
-
+ 
   @override
   void dispose() {
     flickManager.dispose();
     super.dispose();
   }
 
+  Future<void> seekto(){
+    print("i tried");
+
+    if(flickManager.flickVideoManager.isPlaying && Seeked != 1){
+      Seeked = 1;
+      var lasttimestamp = timestamps.get(widget.animeid)["timestamp"];
+      print("lasttime");
+      print(lasttimestamp);
+      if(lasttimestamp != null){
+        print("SEEKED");
+         flickManager.flickControlManager.seekTo(Duration(seconds: lasttimestamp));
+      }
+    }
+  }
+  void savetemp(Duration timestamp,Duration durationvideo){
+    if(Seeked != 0){
+      timestamps.put(widget.animeid,{"duration":durationvideo.inSeconds,"timestamp":timestamp.inSeconds});
+      print(timestamps.get(widget.animeid));
+    }
+  }
+
   Widget get_video(){
     if(Link != null){
         if(Link is String){
+
           flickManager = FlickManager(
             videoPlayerController:
             VideoPlayerController.network(Link),
           );
+          flickManager.flickControlManager.addListener(() {seekto();});
+          flickManager.flickVideoManager.addListener(() {savetemp(flickManager.flickVideoManager.videoPlayerValue.position,flickManager.flickVideoManager.videoPlayerValue.duration);});
         }else{
           flickManager = FlickManager(
             videoPlayerController:
             VideoPlayerController.file(Link),
+
           );
         }
+
       return Scaffold(
         backgroundColor: Colors.black,
         body: Container(
@@ -75,6 +113,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
               systemUIOverlay: [],
               flickVideoWithControls: FlickVideoWithControls(
                 controls: LandscapePlayerControls(),
+
               ),
             ),
           ),

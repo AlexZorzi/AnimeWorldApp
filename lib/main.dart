@@ -23,6 +23,7 @@ void main() async{
   var document = await getApplicationDocumentsDirectory();
   Hive.init(document.path);
   await Hive.openBox<Map>("favorites");
+  await Hive.openBox<Map>("timestamps");
   await Hive.openBox<Map>("animedownload");
 
   FlutterDownloader.initialize(

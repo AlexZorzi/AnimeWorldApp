@@ -35,7 +35,6 @@ class _AnimeInfoState extends State<AnimeInfo> {
     super.initState();
     getData_Info();
     animedownload = Hive.box<Map>("animedownload");
-    print(animedownload.values);
 
   }
 
@@ -212,7 +211,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: episodeLink,),),);},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: episodeLink, epnumber: episodeNumber, animeid: widget.Link.split("/")[2].split(".")[0],),),);},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[
