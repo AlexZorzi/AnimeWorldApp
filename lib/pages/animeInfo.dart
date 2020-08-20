@@ -103,6 +103,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
         ),
       );
     }
+
     return ListView.separated(
       itemCount: dataInfo[5][0]?.length,
       itemBuilder: (BuildContext context, int index) {
