@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/functions/favoritemanager.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -12,6 +13,7 @@ import '../widgets/EpisodeCard.dart';
 import '../pages/videopage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 
 
 class AnimeInfo extends StatefulWidget {
@@ -28,6 +30,8 @@ class AnimeInfo extends StatefulWidget {
 
 class _AnimeInfoState extends State<AnimeInfo> {
   Box<Map> animedownload;
+  Box<Map> timestamps;
+  String animeid;
   List dataInfo;
 
   @override
@@ -35,7 +39,8 @@ class _AnimeInfoState extends State<AnimeInfo> {
     super.initState();
     getData_Info();
     animedownload = Hive.box<Map>("animedownload");
-
+    timestamps = Hive.box<Map>("timestamps");
+    animeid = widget.Link.split("/")[2].split(".")[0];
   }
 
   Future<String> getData_Info() async {
@@ -206,12 +211,34 @@ class _AnimeInfoState extends State<AnimeInfo> {
       ,);
   }
 
+
+
   GetEpisodeCard(episodeNumber,episodeLink, eparray){
+
+    var timedata = timestamps.get(animeid+episodeNumber);
+    double percentage;
+    Widget progress;
+    if(timedata != null){
+      percentage = (timedata["timestamp"] / timedata["duration"] * 100);
+      progress = Expanded(
+        child:  RoundedProgressBar(
+          height: 3.5,
+          style: RoundedProgressBarStyle(
+              borderWidth: 0,
+              widthShadow: 0),
+          borderRadius: BorderRadius.circular(24),
+          percent: percentage,
+        ),
+      );
+
+    }else{
+      progress = Container();
+    }
     return Card(
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: episodeLink, epnumber: episodeNumber, animeid: widget.Link.split("/")[2].split(".")[0],),),);},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: episodeLink, epnumber: episodeNumber, animeid: animeid,refreshinfo: (){setState(() {});},),),);},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[
@@ -259,6 +286,11 @@ class _AnimeInfoState extends State<AnimeInfo> {
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              progress,
                             ],
                           ),
                         ],

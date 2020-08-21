@@ -61,10 +61,10 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   Future<void> seekto(){
     if(flickManager.flickVideoManager.isPlaying && Seeked != 1){
       Seeked = 1;
-      var lasttimestamp = timestamps.get(widget.animeid+widget.epnumber)["timestamp"];
+      var lasttimestamp = timestamps.get(widget.animeid+widget.epnumber);
       print(lasttimestamp);
       if(lasttimestamp != null){
-         flickManager.flickControlManager.seekTo(Duration(seconds: lasttimestamp));
+         flickManager.flickControlManager.seekTo(Duration(seconds: lasttimestamp["timestamp"]));
       }
     }
   }
