@@ -31,8 +31,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     super.initState();
     Seeked = 0;
     timestamps = Hive.box<Map>("timestamps");
-    print("HEY");
-    print(timestamps.get(widget.animeid));
+    print(timestamps.get(widget.animeid+widget.epnumber));
     if(widget.RawLink is String){
       getData_Video_web();
     }else{
@@ -60,23 +59,19 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   }
 
   Future<void> seekto(){
-    print("i tried");
-
     if(flickManager.flickVideoManager.isPlaying && Seeked != 1){
       Seeked = 1;
-      var lasttimestamp = timestamps.get(widget.animeid)["timestamp"];
-      print("lasttime");
+      var lasttimestamp = timestamps.get(widget.animeid+widget.epnumber)["timestamp"];
       print(lasttimestamp);
       if(lasttimestamp != null){
-        print("SEEKED");
          flickManager.flickControlManager.seekTo(Duration(seconds: lasttimestamp));
       }
     }
   }
   void savetemp(Duration timestamp,Duration durationvideo){
     if(Seeked != 0){
-      timestamps.put(widget.animeid,{"duration":durationvideo.inSeconds,"timestamp":timestamp.inSeconds});
-      print(timestamps.get(widget.animeid));
+      timestamps.put(widget.animeid+widget.epnumber,{"duration":durationvideo.inSeconds,"timestamp":timestamp.inSeconds});
+      print(timestamps.get(widget.animeid+widget.epnumber));
     }
   }
 
