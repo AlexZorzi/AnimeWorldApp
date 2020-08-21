@@ -225,7 +225,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
           splashColor: Colors.indigoAccent,
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
-              builder: (context) => LandscapePlayer(RawLink: episodeFile,),),);
+              builder: (context) => LandscapePlayer(RawLink: episodeFile,epnumber: episodeNumber,animeid: widget.Link.split("/")[2].split(".")[0],),),);
           },
           child: Padding(
             padding: EdgeInsets.all(7),

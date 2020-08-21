@@ -88,8 +88,6 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
             videoPlayerController:
             VideoPlayerController.network(Link),
           );
-          flickManager.flickControlManager.addListener(() {seekto();});
-          flickManager.flickVideoManager.addListener(() {savetemp(flickManager.flickVideoManager.videoPlayerValue.position,flickManager.flickVideoManager.videoPlayerValue.duration);});
         }else{
           flickManager = FlickManager(
             videoPlayerController:
@@ -97,8 +95,10 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
           );
         }
+        flickManager.flickControlManager.addListener(() {seekto();});
+        flickManager.flickVideoManager.addListener(() {savetemp(flickManager.flickVideoManager.videoPlayerValue.position,flickManager.flickVideoManager.videoPlayerValue.duration);});
 
-      return Scaffold(
+        return Scaffold(
         backgroundColor: Colors.black,
         body: Container(
           alignment: Alignment.center,
