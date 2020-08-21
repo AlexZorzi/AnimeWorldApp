@@ -25,7 +25,6 @@ void main() async{
   await Hive.openBox<Map>("favorites");
   await Hive.openBox<Map>("timestamps");
   await Hive.openBox<Map>("animedownload");
-
   FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
   );
@@ -59,9 +58,6 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void test(){
-    print("ciao");
-  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -84,28 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
-  String _localPath;
-
-  Future<String> _findLocalPath() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-  void _requestDownload(url,pathanime,epnumber) async {
-    String _localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + pathanime;
-
-    final savedDir = Directory(_localPath);
-    bool hasExisted = await savedDir.exists();
-    print(savedDir.listSync());
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    await FlutterDownloader.enqueue(
-        url: url,
-        fileName: epnumber,
-        savedDir: _localPath,
-        showNotification: true,
-        openFileFromNotification: true);
-  }
 
   void FavManager(String link, String imageLink, String title){
     if(favorites.get("/play/"+link.split("/")[2]) == null){
@@ -160,17 +134,11 @@ class _MyHomePageState extends State<MyHomePage> {
     favorites = Hive.box<Map>("favorites");
     animedownload = Hive.box<Map>("animedownload");
     print(animedownload.values);
-    refreshDownloads();
     getData_Homepage();
     selectedIndex = 0;
   }
 
-  void refreshDownloads() async{
-    var downloadpath =  (await _findLocalPath()) + Platform.pathSeparator + 'Download';
-    setState(() {
-      downloadfiles = Directory(downloadpath).listSync();
-      });
-  }
+
   Column _indexManager() {
     switch (selectedIndex) {
       case 0:
@@ -400,7 +368,7 @@ class _MyHomePageState extends State<MyHomePage> {
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeDownloadDisplay(Title: title, Link: Link,imageLink: imageLink),),);},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeDownloadDisplay(Title: title, Link: Link,imageLink: imageLink, refreshmain: (){setState(() {print("dontask");});},),),);},
         onLongPress: () {FavManager(Link, imageLink, title);},
         child: Padding(
           padding: EdgeInsets.all(7),

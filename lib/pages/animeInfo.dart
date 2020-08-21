@@ -321,13 +321,20 @@ class _AnimeInfoState extends State<AnimeInfo> {
         .then((Directory directory) {
     });
     DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
-    await FlutterDownloader.enqueue(
+    var test = await FlutterDownloader.enqueue(
 
         url: (await getData_Video(url)),
         fileName: epnumber+".mp4",
         savedDir: localPath,
         showNotification: true,
         openFileFromNotification: true);
+    madonna();
+
+  }
+  Future<void> madonna()async{
+    var tasks = await FlutterDownloader.loadTasks();
+    print("MDA");
+    print(tasks);
   }
 
 }

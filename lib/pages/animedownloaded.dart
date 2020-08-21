@@ -20,8 +20,9 @@ class AnimeDownloadDisplay extends StatefulWidget {
   final String Link;
   final String Title;
   final String imageLink;
+  final Function refreshmain;
 
-  const AnimeDownloadDisplay({Key key, this.Title, this.Link, this.imageLink}) : super(key: key);
+  const AnimeDownloadDisplay({Key key, this.Title, this.Link, this.imageLink, this.refreshmain}) : super(key: key);
 
   @override
   _AnimeDownloadDisplayState createState() => _AnimeDownloadDisplayState();
@@ -297,6 +298,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
                                                   widget.Link.split("/")[2]
                                                       .split(".")[0],
                                                   episodeNumber);
+                                              widget.refreshmain();
                                             },
                                           ),
                                         )

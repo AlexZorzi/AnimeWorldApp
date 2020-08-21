@@ -59,7 +59,7 @@ void DownloadManager(String link, String imageLink, String title, Box<Map> hiveb
           'episodes' : episodes
         }
     );
-
+    print(hivebox.get(animeid)["episodes"].values.length == 0);
     if(hivebox.get(animeid)["episodes"].values.length == 0){hivebox.delete(animeid);}
     print(title+" Deleted (downloadmanager)");
 
