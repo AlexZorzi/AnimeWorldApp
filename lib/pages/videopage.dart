@@ -10,8 +10,8 @@ import 'package:hive/hive.dart';
 
 
 class LandscapePlayer extends StatefulWidget {
-  LandscapePlayer({Key key, this.RawLink, this.epnumber, this.animeid}) : super(key: key);
-
+  LandscapePlayer({Key key, this.RawLink, this.epnumber, this.animeid, this.refreshinfo}) : super(key: key);
+  final Function refreshinfo;
   final RawLink;
   final epnumber;
   final animeid;
@@ -72,6 +72,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     if(Seeked != 0){
       timestamps.put(widget.animeid+widget.epnumber,{"duration":durationvideo.inSeconds,"timestamp":timestamp.inSeconds});
       print(timestamps.get(widget.animeid+widget.epnumber));
+      widget.refreshinfo();
     }
   }
 
