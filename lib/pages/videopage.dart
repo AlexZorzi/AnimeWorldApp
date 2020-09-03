@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'landscape_player_controls.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter/services.dart';
 
 
 class LandscapePlayer extends StatefulWidget {
@@ -96,7 +97,8 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
         return Scaffold(
         backgroundColor: Colors.black,
-        body: Container(
+        body: WillPopScope(child:
+        Container(
           alignment: Alignment.center,
           child: AspectRatio(
             aspectRatio: 16/9,
@@ -113,13 +115,20 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
               ),
             ),
           ),
-        ),
+        ), onWillPop: (){
+          SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+          SystemChrome.setPreferredOrientations(
+              [DeviceOrientation.portraitUp]);
+          Navigator.pop(context);
+        })
       );
     }
     else{
       return Container();
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
       return get_video();
