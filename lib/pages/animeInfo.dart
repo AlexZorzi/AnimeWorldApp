@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/functions/favoritemanager.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -52,9 +53,11 @@ class _AnimeInfoState extends State<AnimeInfo> {
       return "Success";
   }
 
-  String getData_Genres(){
+  Widget getData_Genres(){
     if(dataInfo == null){
-      return "Loading";
+      return SkeletonAnimation(
+          child: Text("Loading...",style: Theme.of(context).textTheme.caption)
+      );
     }
     else{
       String returnable = "";
@@ -62,39 +65,49 @@ class _AnimeInfoState extends State<AnimeInfo> {
         returnable += gen;
         returnable += " ";
       }
-      return returnable;
+      return Text(returnable,style: Theme.of(context).textTheme.caption);
     }
   }
-  String getData_Desc(){
+  Widget getData_Desc(){
     if(dataInfo == null){
-      return "Loading";
+      return SkeletonAnimation(
+          child: Text("Loading...",style: Theme.of(context).textTheme.caption)
+      );
     }
     else{
-      return dataInfo[3];
+      return Text(dataInfo[3],style: Theme.of(context).textTheme.caption);
+
     }
   }
-  String getData_Status(){
+  Widget getData_Status(){
     if(dataInfo == null){
-      return "Loading";
+      return SkeletonAnimation(
+          child: Text("Loading...",style: Theme.of(context).textTheme.caption)
+      );
     }
     else{
-      return dataInfo[2];
+      return Text(dataInfo[2],style: Theme.of(context).textTheme.caption);
     }
   }
-  String getData_Lenghteps(){
+  Widget getData_Lenghteps(){
     if(dataInfo == null){
-      return "Loading";
+      return SkeletonAnimation(
+          child: Text("Loading...",style: Theme.of(context).textTheme.caption)
+      );
     }
     else{
-      return dataInfo[1];
+      return Text(dataInfo[1],style: Theme.of(context).textTheme.caption);
     }
   }
-  String getData_Rating(){
+  Widget getData_Rating(){
     if(dataInfo == null){
-      return "Loading";
+      return SkeletonAnimation(
+          child: Text("Loading...",style: Theme.of(context).textTheme.caption)
+      );
     }
     else{
-      return dataInfo[0];
+      return Text(dataInfo[0],style: Theme.of(context).textTheme.caption);
+
     }
   }
 
@@ -120,6 +133,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -141,7 +155,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                           SizedBox(
                             height: 7.0,
                           ),
-                          Text(getData_Genres(),style: Theme.of(context).textTheme.caption,),
+                              Container(child: getData_Genres()),
                           SizedBox(height: 9.0),
                           SizedBox(height: 13.0),
                           Row(
@@ -153,9 +167,8 @@ class _AnimeInfoState extends State<AnimeInfo> {
                                     "Status",
                                     style: Theme.of(context).textTheme.caption,
                                   ),
-                                  Text(
-                                    getData_Status(),
-                                    style: Theme.of(context).textTheme.subhead,
+                                  Container(
+                                    child: getData_Status(),
                                   ),
                                 ],
                               ),
@@ -165,9 +178,8 @@ class _AnimeInfoState extends State<AnimeInfo> {
                                     "Rating",
                                     style: Theme.of(context).textTheme.caption,
                                   ),
-                                  Text(
-                                    getData_Rating(),
-                                    style: Theme.of(context).textTheme.subhead,
+                                  SkeletonAnimation(
+                                    child: getData_Rating(),
                                   ),
                                 ],
                               ),
@@ -177,9 +189,8 @@ class _AnimeInfoState extends State<AnimeInfo> {
                                     "Length",
                                     style: Theme.of(context).textTheme.caption,
                                   ),
-                                  Text(
-                                    getData_Lenghteps(),
-                                    style: Theme.of(context).textTheme.subhead,
+                                  SkeletonAnimation(
+                                    child: getData_Lenghteps(),
                                   ),
                                 ],
                               ),
