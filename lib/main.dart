@@ -15,7 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 
 
 void main() async{
@@ -25,6 +25,7 @@ void main() async{
   await Hive.openBox<Map>("favorites");
   await Hive.openBox<Map>("timestamps");
   await Hive.openBox<Map>("animedownload");
+  await Permission.storage.request();
   FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
   );
