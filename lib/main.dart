@@ -250,8 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
       return GridView.count(
           crossAxisCount: 2,
-          crossAxisSpacing: 20.0,
-          mainAxisSpacing: 20.0,
+          mainAxisSpacing: 10.0,
           shrinkWrap: true,
           children: List.generate(dataHomepage.length, (index) {
                    return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
