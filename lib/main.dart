@@ -16,6 +16,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:cache_image/cache_image.dart';
 
 
 void main() async{
@@ -303,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Row(
                               children: <Widget>[
                                 Image(
-                                  image: NetworkImage(imageLink),
+                                  image: CacheImage(imageLink),
                                   width: 50,),
                                 SizedBox(
                                   height: 10,
@@ -385,7 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Row(
                             children: <Widget>[
                               Image(
-                                image: NetworkImage(imageLink),
+                                image: CacheImage(imageLink),
                                 width: 50,),
                               SizedBox(
                                 height: 10,

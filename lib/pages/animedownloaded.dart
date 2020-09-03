@@ -14,7 +14,7 @@ import '../widgets/EpisodeCard.dart';
 import '../pages/videopage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
-
+import 'package:cache_image/cache_image.dart';
 
 class AnimeDownloadDisplay extends StatefulWidget {
   final String Link;
@@ -139,7 +139,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Image(image: NetworkImage(widget.imageLink),),
+              Image(image: CacheImage(widget.imageLink),),
               SizedBox(
                 height: 11,
               ),

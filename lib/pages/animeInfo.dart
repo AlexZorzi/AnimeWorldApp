@@ -14,7 +14,7 @@ import '../pages/videopage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
-
+import 'package:cache_image/cache_image.dart';
 
 class AnimeInfo extends StatefulWidget {
   final String Link;
@@ -127,7 +127,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
         body: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Image(image: NetworkImage(widget.imageLink),),
+                    Image(image: CacheImage(widget.imageLink),),
                     SizedBox(
                       height: 11,
                     ),

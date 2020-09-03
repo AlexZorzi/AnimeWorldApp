@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../pages/animeInfo.dart';
+import 'package:cache_image/cache_image.dart';
 class SearchCard extends StatelessWidget {
   SearchCard({Key key, this.dataSearch}) : super(key: key);
 
@@ -31,7 +32,7 @@ class SearchCard extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Image(
-                                image: NetworkImage(imageLink),
+                                image: CacheImage(imageLink),
                                 width: 150,),
                               SizedBox(
                                 height: 10,
