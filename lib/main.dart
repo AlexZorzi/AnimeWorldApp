@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
+import 'package:download_manager/download_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -79,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int selectedIndex;
   Box<Map> favorites;
   Box<Map> animedownload;
+
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
@@ -138,7 +142,11 @@ class _MyHomePageState extends State<MyHomePage> {
     print(animedownload.values);
     getData_Homepage();
     selectedIndex = 0;
+
   }
+
+
+
 
 
   Column _indexManager() {
@@ -428,4 +436,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   }
+
+
 

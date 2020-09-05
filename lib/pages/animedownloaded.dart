@@ -337,7 +337,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
     print(animedownload.get("/play/"+widget.Link.split("/")[2]));
     setState(() {
       File(localPath+"/"+epnumber+".mp4").delete();
-      DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
+      //DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
     });
   }
 
