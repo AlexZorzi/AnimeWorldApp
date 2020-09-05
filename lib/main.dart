@@ -29,6 +29,7 @@ void main() async{
   await Hive.openBox<Map>("favorites");
   await Hive.openBox<Map>("timestamps");
   await Hive.openBox<Map>("animedownload");
+  await Hive.openBox<String>("downloadworks");
   await Permission.storage.request();
   FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console

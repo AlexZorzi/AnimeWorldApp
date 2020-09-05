@@ -45,6 +45,8 @@ class _AnimeInfoState extends State<AnimeInfo> {
     animedownload = Hive.box<Map>("animedownload");
     timestamps = Hive.box<Map>("timestamps");
     animeid = widget.Link.split("/")[2].split(".")[0];
+    const oneSecond = const Duration(seconds: 2);
+
 
   }
 

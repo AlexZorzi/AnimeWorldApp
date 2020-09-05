@@ -122,8 +122,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
       itemCount: animedata["episodes"].length,
       itemBuilder: (BuildContext context, int index) {
 
-        var filepath = animedata["episodes"][sortedkeys[index].toString()];
-        return GetEpisodeCard(sortedkeys[index].toString(),File(filepath));
+        return EpisodeCard(episodeNumber: sortedkeys[index].toString(),episodeLink: "",eparray: [],animeid: animeid,Link: widget.Link,imageLink: widget.imageLink,Title: widget.Title,callback: update,);
       },
       separatorBuilder: (context, index) {
         return Divider();
@@ -131,6 +130,11 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
     );
   }
 
+  void update(){
+    setState(() {
+      print("update");
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -223,124 +227,6 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
         )
         ,)
       ,);
-  }
-
-  GetEpisodeCard(episodeNumber,episodeFile){
-
-    var timedata = timestamps.get(animeid+episodeNumber);
-    double percentage;
-    Widget progress;
-    if(timedata != null){
-      percentage = (timedata["timestamp"] / timedata["duration"] * 100);
-      progress = Expanded(
-        child:  RoundedProgressBar(
-          height: 3.5,
-          style: RoundedProgressBarStyle(
-              borderWidth: 0,
-              widthShadow: 0),
-          borderRadius: BorderRadius.circular(24),
-          percent: percentage,
-        ),
-      );
-
-    }else{
-      progress = Container();
-    }
-    if(episodeFile != null) {
-      return Card(
-        elevation: 5,
-        child: InkWell(
-          splashColor: Colors.indigoAccent,
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => LandscapePlayer(RawLink: episodeFile,epnumber: episodeNumber,animeid: animeid,refreshinfo: (){setState(() {});}),),);
-          },
-          child: Padding(
-            padding: EdgeInsets.all(7),
-            child: Stack(children: <Widget>[
-              Align(
-                alignment: Alignment.centerRight,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 5),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Flexible(
-                                  child: new Container(
-                                    margin: EdgeInsets.only(
-                                        left: 15, bottom: 15),
-                                    child: Row(
-                                      children: <Widget>[
-                                        new Text(
-                                          "Episodio " + episodeNumber,
-                                          overflow: TextOverflow.clip,
-                                          style: new TextStyle(
-                                            fontSize: 18.0,
-                                            fontFamily: 'Roboto',
-                                            color: new Color(0xFF212121),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 190,
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 30,
-                                          child: InkWell(
-                                            child: Icon(Icons.delete),
-                                            onTap: () {
-                                              deleterequest(
-                                                  widget.Link.split("/")[2]
-                                                      .split(".")[0],
-                                                  episodeNumber);
-                                              widget.refreshmain();
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                progress,
-                              ],
-                            ),
-                          ],
-                        ))
-                  ],
-                ),
-              )
-            ]),
-          ),
-        ),
-      );
-    }
-  }
-  Future<String> _findLocalPath() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-  void deleterequest(animelink,epnumber) async {
-    String localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + animelink;
-    new Directory(localPath).create(recursive: true)
-    // The created directory is returned as a Future.
-        .then((Directory directory) {
-    });
-    print(animedownload.get("/play/"+widget.Link.split("/")[2]));
-    setState(() {
-      File(localPath+"/"+epnumber+".mp4").delete();
-      //DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
-    });
   }
 
 }

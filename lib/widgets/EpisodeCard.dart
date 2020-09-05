@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
@@ -17,7 +18,7 @@ import 'package:circular_custom_loader/circular_custom_loader.dart';
 
 
 class EpisodeCard extends StatefulWidget{
-  EpisodeCard({Key key, this.episodeNumber, this.episodeLink, this.eparray, this.animeid, this.Link, this.imageLink, this.Title}) : super(key: key);
+  EpisodeCard({Key key, this.episodeNumber, this.episodeLink, this.eparray, this.animeid, this.Link, this.imageLink, this.Title, this.callback}) : super(key: key);
 
   final String episodeNumber;
   final String episodeLink;
@@ -26,6 +27,7 @@ class EpisodeCard extends StatefulWidget{
   final String Link;
   final String imageLink;
   final String Title;
+  final Function callback;
   @override
   _EpisodeCardState createState() => _EpisodeCardState();
 
@@ -36,20 +38,66 @@ class _EpisodeCardState extends State<EpisodeCard> {
   var downloadprogress;
   Box<Map> timestamps;
   Box<Map> animedownload;
+  Box<String> downloadworks;
+
   var localPathtry;
-  var downloadPercentage;
+  var downloadstatus;
   var doiexistWid;
   var videosource;
   var workid;
+  var existsbool;
+  var mytimer;
   @override
   void initState(){
     super.initState();
     downloadprogress = 0;
     timestamps = Hive.box<Map>("timestamps");
     animedownload = Hive.box<Map>("animedownload");
+    downloadworks = Hive.box<String>("downloadworks");
+    workid = downloadworks.get(widget.animeid+widget.episodeNumber);
+    print(workid);
     doiexist();
     getProgress();
+    const oneSecond = const Duration(seconds: 2);
+    mytimer = Timer.periodic(oneSecond, (Timer t) => setState((){
+      if(workid != null){
+        FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
+          downloadprogress = value[0].progress
+        });
+        FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
+          downloadstatus = value[0].status
+        });
+      }
+    }));
   }
+
+
+  Widget getDownloadprogress(){
+    print(downloadstatus);
+    if(downloadstatus != null && downloadstatus == DownloadTaskStatus.running){
+      return  CircularLoader(
+          coveredPercent: downloadprogress.toDouble(),
+          width: 50.0,
+          height: 50.0,
+          circleWidth: 7.0,
+          circleColor: Colors.grey[300],
+          coveredCircleColor: Colors.green,
+          circleHeader: '',
+          unit: '%'
+      );
+    }
+    else{
+      return Container();
+    }
+  }
+
+
+  @override
+  void dispose() {
+    mytimer.cancel();
+    super.dispose();
+  }
+
   Future<void> doiexist() async{
     localPathtry = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + widget.animeid;
     print(widget.episodeNumber);
@@ -158,6 +206,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
                           Row(
                             children: <Widget>[
                               progress,
+                              getDownloadprogress(),
                             ],
                           ),
                         ],
@@ -196,9 +245,10 @@ class _EpisodeCardState extends State<EpisodeCard> {
         savedDir: localPath,
         showNotification: true,
         openFileFromNotification: true).then((workidd) => {
-          workid = workidd
+          downloadworks.put(widget.animeid+widget.episodeNumber, workidd)
     });
     setState(() {
+      workid = downloadworks.get(widget.animeid+widget.episodeNumber);
       videosource = File(localPathtry+"/"+widget.episodeNumber+".mp4");
       doiexistWid = InkWell(
         child: Icon(Icons.delete_forever),
@@ -218,12 +268,18 @@ class _EpisodeCardState extends State<EpisodeCard> {
       FlutterDownloader.cancel(taskId: workid);
       File(localPath+"/"+epnumber+".mp4").delete();
       setState(() {
+        workid = null;
+        downloadstatus = DownloadTaskStatus.canceled;
         doiexistWid = InkWell(
           child: Icon(Icons.file_download),
           onTap: (){pathrequest(widget.episodeLink, widget.Link.split("/")[2].split(".")[0], widget.episodeNumber);},
         );
       });
       DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
+      try{
+        widget.callback();
+      }
+      catch(e){}
     });
   }
   void DownloadManager(String link, String imageLink, String title, Box<Map> hivebox, String epnumber, String eplink){
