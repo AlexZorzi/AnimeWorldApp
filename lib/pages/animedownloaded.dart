@@ -139,7 +139,9 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Image(image: CacheImage(widget.imageLink),),
+              Image(image: NetworkImage(widget.imageLink),),
+              // using image cache here produces a flickering of the main image
+              // idk why further research is needed.
               SizedBox(
                 height: 11,
               ),
