@@ -132,6 +132,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
 
   void update(){
     setState(() {
+      widget.refreshmain();
       print("update");
     });
   }
