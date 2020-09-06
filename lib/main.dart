@@ -253,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (dataHomepage == null || dataHomepage.length < 1) {
       return Container(
         child: Center(
-          child: Icon(Icons.search, size: 50, color: Colors.black12,),
+          child: Icon(Icons.home, size: 50, color: Colors.black12,),
         ),
       );
     }
