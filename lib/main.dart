@@ -161,9 +161,18 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         return Column(
           children: <Widget>[
-            Container(
-              child: TextField(
-                controller: myController, onSubmitted: changeQuery,),
+            Card(
+              elevation: 5,
+              child: Container(
+                width: 400,
+                child: TextField(
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(20.0),
+                      hintText: 'Cerca Anime',
+                    focusedBorder: InputBorder.none,
+                  ),
+                  controller: myController, onSubmitted: changeQuery,),
+              ),
             ),
             Expanded(
               child: getList_Search(),

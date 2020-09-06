@@ -39,6 +39,7 @@ dependencies:
   flutter_downloader: 1.5.0
   download_manager:
   path_provider: ^1.3.0
+  beauty_textfield:
   file_utils: ^0.1.3
   permission_handler:
   cache_image:

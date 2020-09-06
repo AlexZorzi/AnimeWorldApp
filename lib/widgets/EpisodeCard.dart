@@ -255,7 +255,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
         fileName: epnumber+".mp4",
         savedDir: localPath,
         showNotification: true,
-        openFileFromNotification: true).then((workidd) => {
+        openFileFromNotification: false).then((workidd) => {
           downloadworks.put(widget.animeid+widget.episodeNumber, workidd)
     });
     setState(() {
