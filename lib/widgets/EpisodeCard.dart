@@ -109,8 +109,8 @@ class _EpisodeCardState extends State<EpisodeCard> {
   Future<void> doiexist() async{
     localPathtry = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + widget.animeid;
     print(widget.episodeNumber);
-    print(localPathtry+"/"+widget.episodeNumber+".mp4");
-    if(!File(localPathtry+"/"+widget.episodeNumber+".mp4").existsSync()){
+    print(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4");
+    if(!File(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4").existsSync()){
       setState(() {
         videosource = widget.episodeLink;
         doiexistWid = InkWell(
@@ -121,7 +121,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
     }
     else{
       setState(() {
-        videosource = File(localPathtry+"/"+widget.episodeNumber+".mp4");
+        videosource = File(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4");
         doiexistWid = InkWell(
           child: Icon(Icons.delete_forever),
           onTap: (){deleterequest(widget.animeid,widget.episodeNumber);},
@@ -252,7 +252,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
     DownloadManager(widget.Link, widget.imageLink, widget.Title, animedownload, epnumber, localPath+"/"+epnumber+".mp4");
     var test = await FlutterDownloader.enqueue(
         url: (await getData_Video(url)),
-        fileName: epnumber+".mp4",
+        fileName: epnumber+widget.animeid+".mp4",
         savedDir: localPath,
         showNotification: true,
         openFileFromNotification: false).then((workidd) => {
@@ -260,7 +260,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
     });
     setState(() {
       workid = downloadworks.get(widget.animeid+widget.episodeNumber);
-      videosource = File(localPathtry+"/"+widget.episodeNumber+".mp4");
+      videosource = File(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4");
       doiexistWid = InkWell(
         child: Icon(Icons.delete_forever),
         onTap: (){deleterequest(widget.animeid,widget.episodeNumber);},
