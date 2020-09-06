@@ -75,15 +75,23 @@ class _EpisodeCardState extends State<EpisodeCard> {
   Widget getDownloadprogress(){
     print(downloadstatus);
     if(downloadstatus != null && downloadstatus == DownloadTaskStatus.running){
-      return  CircularLoader(
-          coveredPercent: downloadprogress.toDouble(),
-          width: 50.0,
-          height: 50.0,
-          circleWidth: 7.0,
-          circleColor: Colors.grey[300],
-          coveredCircleColor: Colors.green,
-          circleHeader: '',
-          unit: '%'
+      return  Row(
+        children: <Widget>[
+        Divider(),
+      Expanded(
+      child:  RoundedProgressBar(
+        height: 3.5,
+        style: RoundedProgressBarStyle(
+            colorProgress: Colors.orangeAccent,
+            backgroundProgress: Colors.yellow[100],
+            borderWidth: 0,
+            widthShadow: 0
+        ),
+        borderRadius: BorderRadius.circular(24),
+        percent: downloadprogress.toDouble(),
+      ),
+    ),
+        ],
       );
     }
     else{
@@ -206,11 +214,14 @@ class _EpisodeCardState extends State<EpisodeCard> {
                           Row(
                             children: <Widget>[
                               progress,
-                              getDownloadprogress(),
                             ],
                           ),
+
+                          getDownloadprogress(),
+
                         ],
-                      ))
+                      )
+                  )
                 ],
               ),
             )
