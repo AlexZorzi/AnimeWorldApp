@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'functions/favoritemanager.dart';
 import 'functions/html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'widgets/SearchCard.dart';
@@ -88,20 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
 
-  void FavManager(String link, String imageLink, String title){
-    if(favorites.get("/play/"+link.split("/")[2]) == null){
-      setState(() {
-        favorites.put("/play/"+link.split("/")[2], {"link":"/play/"+link.split("/")[2], "imageLink":imageLink,"title":title});
-      });
-      print(title+" Added");
-    }else{
-      setState(() {
-        favorites.delete("/play/"+link.split("/")[2]);
-      });
-      print(title+" Deleted");
 
-    }
-  }
 
   void changeQuery(String text) {
     query = myController.text;
@@ -139,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     favorites = Hive.box<Map>("favorites");
+    favorites.clear();
     animedownload = Hive.box<Map>("animedownload");
     print(animedownload.values);
     getData_Homepage();
@@ -271,6 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSpacing: 10.0,
           shrinkWrap: true,
           children: List.generate(dataHomepage.length, (index) {
+                    print(dataHomepage[index]);
                    return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
               },
           ),
@@ -289,8 +279,7 @@ class _MyHomePageState extends State<MyHomePage> {
       itemCount: favorites.values.length,
       itemBuilder: (BuildContext context, int index) {
         var anime = favorites.getAt(index);
-        print(favorites.values);
-        print(anime);
+        print(favorites.keys);
         return FavoriteCardMethod(anime["title"], anime["link"],anime["imageLink"]);
       },
       separatorBuilder: (context, index) {
@@ -301,12 +290,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     FavoriteCardMethod(title, Link, imageLink){
+    print(Link);
       return Card(
         elevation: 5,
         child: InkWell(
           splashColor: Colors.indigoAccent,
           onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: title, Link: Link,imageLink: imageLink),),);},
-          onLongPress: () {FavManager(Link, imageLink, title);},
+          onLongPress: () {FavManager(Link, imageLink, title, favorites, );},
           child: Padding(
             padding: EdgeInsets.all(7),
             child: Stack(children: <Widget>[
@@ -388,7 +378,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: InkWell(
         splashColor: Colors.indigoAccent,
         onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeDownloadDisplay(Title: title, Link: Link,imageLink: imageLink, refreshmain: (){setState(() {print("dontask");});},),),);},
-        onLongPress: () {FavManager(Link, imageLink, title);},
+        onLongPress: () {},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[
@@ -404,7 +394,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: <Widget>[
                               Image(
                                 image: CacheImage(imageLink),
-                                width: 50,),
+                                width: 100,),
                               SizedBox(
                                 height: 10,
                               ),

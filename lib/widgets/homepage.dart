@@ -25,7 +25,6 @@ class homepageitem extends StatelessWidget {
     String Link = dataHomepage[1];
     String imageLink = dataHomepage[2];
     String episodeNumber = dataHomepage[3];
-
     return GestureDetector(
       onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: Title,Link: Link,imageLink: imageLink,)));},
       onLongPress: () {FavManager(Link, imageLink, Title, favorites); print(imageLink);},
