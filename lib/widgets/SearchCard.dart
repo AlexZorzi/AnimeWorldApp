@@ -21,6 +21,7 @@ class _SearchCardState extends State<SearchCard>{
   var imageLink;
   var Chips;
   var animeid;
+  var hearticon;
   Box<Map> favorites;
   @override
   void initState(){
@@ -30,11 +31,22 @@ class _SearchCardState extends State<SearchCard>{
     Link = widget.dataSearch[1];
     imageLink = widget.dataSearch[2];
     Chips = widget.dataSearch[3];
-    animeid = Link;
-
+    animeid = Link.split("/")[2].split(".")[0];
+    isfavorite();
   }
 
-
+ Widget isfavorite(){
+    if(favorites.get(animeid) == null){
+      setState(() {
+        //hearticon = Container();
+        hearticon = Icon(Icons.favorite_border, color: Colors.red,);
+      });
+    }else{
+      setState(() {
+        hearticon = Icon(Icons.favorite, color: Colors.red,);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,7 @@ class _SearchCardState extends State<SearchCard>{
       child: InkWell(
           splashColor: Colors.indigoAccent,
           onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: Title,Link: Link,imageLink: imageLink),),);},
-        onLongPress: () {FavManager(animeid, imageLink, Title, favorites); print(imageLink);},
+        onLongPress: () {FavManager(Link, imageLink, Title, favorites); isfavorite();},
       child: Padding(
         padding: EdgeInsets.all(7),
         child: Stack(children: <Widget>[
@@ -58,7 +70,7 @@ class _SearchCardState extends State<SearchCard>{
                         Row(
                           children: <Widget>[
                             Image(
-                              image: CacheImage(imageLink),
+                              image: NetworkImage(imageLink),
                               width: 150,),
                             SizedBox(
                               height: 10,
@@ -66,22 +78,23 @@ class _SearchCardState extends State<SearchCard>{
                             Flexible(
                               child: Row(
                                 children: <Widget>[
-                                  new Container(
-                                    margin: EdgeInsets.only(
-                                        left: 15, bottom: 150),
-                                    child: new Text(
-                                      Title,
-                                      overflow: TextOverflow.clip,
-                                      style: new TextStyle(
-                                        fontSize: 18.0,
-                                        fontFamily: 'Roboto',
-                                        color: new Color(0xFF212121),
-                                        fontWeight: FontWeight.bold,
+                                   Expanded(
+                                     child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 15, bottom: 150),
+                                      child: Text(
+                                        Title,
+                                        overflow: TextOverflow.clip,
+                                        style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontFamily: 'Roboto',
+                                          color: Color(0xFF212121),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
 
                                   ),
-                                  Icon(Icons.favorite, color: Colors.red,),
+                                   ),
                                 ],
                               ),
                             ),
@@ -96,6 +109,11 @@ class _SearchCardState extends State<SearchCard>{
                         ),
                         Row(
                           children: Chips,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            hearticon,
+                          ],
                         )
                       ],
                     ))

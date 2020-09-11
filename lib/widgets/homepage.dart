@@ -70,7 +70,8 @@ class homepageitem extends StatelessWidget {
                   overflow: TextOverflow.clip,
                 ),
               ),
-            )
+            ),
+            Text("test"),
           ],
         ),
       ),
