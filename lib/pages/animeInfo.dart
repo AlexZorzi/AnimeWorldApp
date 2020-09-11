@@ -190,9 +190,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                                     "Rating",
                                     style: Theme.of(context).textTheme.caption,
                                   ),
-                                  SkeletonAnimation(
-                                    child: getData_Rating(),
-                                  ),
+                                  getData_Rating(),
                                 ],
                               ),
                               Column(
@@ -201,9 +199,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                                     "Length",
                                     style: Theme.of(context).textTheme.caption,
                                   ),
-                                  SkeletonAnimation(
-                                    child: getData_Lenghteps(),
-                                  ),
+                                  getData_Lenghteps(),
                                 ],
                               ),
                             ],
