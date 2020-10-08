@@ -127,7 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     favorites = Hive.box<Map>("favorites");
-    favorites.clear();
     animedownload = Hive.box<Map>("animedownload");
     print(animedownload.values);
     getData_Homepage();
