@@ -71,7 +71,7 @@ class homepageitem extends StatelessWidget {
                 ),
               ),
             ),
-            Text("test"),
+            //Text("test"),
           ],
         ),
       ),

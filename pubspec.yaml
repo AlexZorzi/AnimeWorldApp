@@ -46,6 +46,11 @@ dependencies:
   skeleton_text: 1.0.0
   circular_custom_loader:
   flutter_rounded_progress_bar:
+  url_launcher:
+  ota_update:
+  fontisto_flutter:
+  firebase_core:
+  firebase_crashlytics:
 
 
 

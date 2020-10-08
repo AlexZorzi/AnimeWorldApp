@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:download_manager/download_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:fontisto_flutter/fontisto_flutter.dart';
+import 'package:ota_update/ota_update.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'functions/favoritemanager.dart';
@@ -21,6 +23,8 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cache_image/cache_image.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 
 
 void main() async{
@@ -35,6 +39,7 @@ void main() async{
   FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
   );
+
   runApp(MyApp());
 }
 
@@ -131,7 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print(animedownload.values);
     getData_Homepage();
     selectedIndex = 0;
-
   }
 
 
@@ -178,7 +182,13 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[Expanded(child: getDownloads(),)],
         );
         break;
+      case 4:
+        return Column(
+          children: <Widget>[getSettings()],
+        );
+        break;
     }
+
   }
 
   @override
@@ -219,6 +229,10 @@ class _MyHomePageState extends State<MyHomePage> {
           FFNavigationBarItem(
             iconData: Icons.file_download,
             label: 'Download',
+          ),
+          FFNavigationBarItem(
+            iconData: Icons.settings,
+            label: 'Settings',
           ),
         ],
       ),
@@ -369,6 +383,50 @@ class _MyHomePageState extends State<MyHomePage> {
         separatorBuilder: (context, index) {
           return Divider();
         },
+      );
+    }
+    Widget getSettings(){
+      return  Center(
+          child: Column(
+            children: <Widget>[
+              InkWell(
+                child: ListTile(
+                  leading: Icon(
+                    Istos.trello,
+                    color: Colors.deepPurple,
+                  ),
+                  title: Text("Trello"),
+                  trailing: Icon(Icons.open_in_new),
+                ),
+                onTap: () async {
+                  const trello_url = "https://trello.com/b/Tfw7RQsw/animeword-app";
+                  if (await canLaunch(trello_url))
+                    await launch(trello_url);
+                  else
+                    // can't launch url, there is some error
+                    throw "Could not launch $trello_url";
+                },
+              ),
+              InkWell(
+                child: ListTile(
+                  leading: Icon(
+                    Istos.telegram,
+                    color: Colors.blueAccent,
+                  ),
+                  title: Text("Telegram Updates"),
+                  trailing: Icon(Icons.open_in_new),
+                ),
+                onTap: () async {
+                  const telegram_url = "https://t.me/animeworldapp";
+                  if (await canLaunch(telegram_url))
+                    await launch(telegram_url);
+                  else
+                    // can't launch url, there is some error
+                    throw "Could not launch $telegram_url";
+                },
+              ),
+            ],
+          ),
       );
     }
   DownloadCardMethod(title, Link, imageLink){
