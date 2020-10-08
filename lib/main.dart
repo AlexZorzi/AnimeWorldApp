@@ -309,7 +309,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: InkWell(
           splashColor: Colors.indigoAccent,
           onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: title, Link: Link,imageLink: imageLink),),);},
-          onLongPress: () {FavManager(Link, imageLink, title, favorites, );},
+          onLongPress: () {setState(() {
+            FavManager(Link, imageLink, title, favorites, );
+          });},
           child: Padding(
             padding: EdgeInsets.all(7),
             child: Stack(children: <Widget>[
@@ -325,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: <Widget>[
                                 Image(
                                   image: CacheImage(imageLink),
-                                  width: 50,),
+                                  width: 125,),
                                 SizedBox(
                                   height: 10,
                                 ),
