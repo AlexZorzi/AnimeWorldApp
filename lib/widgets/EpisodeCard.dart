@@ -5,14 +5,14 @@ import 'dart:isolate';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/videopage.dart';
+import 'package:animeworldapp/pages/videopage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_app/functions/favoritemanager.dart';
+import 'package:animeworldapp/functions/favoritemanager.dart';
 import 'package:circular_custom_loader/circular_custom_loader.dart';
 
 

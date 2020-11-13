@@ -12,7 +12,6 @@ import 'widgets/SearchCard.dart';
 import 'widgets/HomeCard.dart';
 import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
-import 'pages/animedownloaded.dart';
 import 'package:pwa/client.dart' as pwa;
 
 
