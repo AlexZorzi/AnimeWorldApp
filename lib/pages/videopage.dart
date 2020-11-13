@@ -26,6 +26,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   var Link;
   int Seeked;
   Box<Map> timestamps;
+  String cors = "https://cors-anywhere.herokuapp.com/";
 
   @override
   void initState() {
@@ -33,19 +34,14 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     Seeked = 0;
     timestamps = Hive.box<Map>("timestamps");
     print(timestamps.get(widget.animeid+widget.epnumber));
-    if(widget.RawLink is String){
-      getData_Video_web();
-    }else{
-      setState(() {
-        Link = widget.RawLink;
-      });
-    }
+    getData_Video_web();
+
 
   }
 
   Future<String> getData_Video_web() async {
       var response = await http.get(
-          Uri.encodeFull("https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
+          Uri.encodeFull(cors+"https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
 
       setState(() {
         Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
@@ -79,19 +75,10 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
   Widget get_video(){
     if(Link != null){
-        if(Link is String){
-
           flickManager = FlickManager(
             videoPlayerController:
             VideoPlayerController.network(Link),
           );
-        }else{
-          flickManager = FlickManager(
-            videoPlayerController:
-            VideoPlayerController.file(Link),
-
-          );
-        }
         flickManager.flickControlManager.addListener(() {seekto();});
         flickManager.flickVideoManager.addListener(() {savetemp(flickManager.flickVideoManager.videoPlayerValue.position,flickManager.flickVideoManager.videoPlayerValue.duration);});
 
@@ -124,7 +111,9 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
       );
     }
     else{
-      return Container();
+      return Container(
+        //stays here a few moments while loading the video
+      );
     }
   }
 
