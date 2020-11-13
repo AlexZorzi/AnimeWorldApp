@@ -23,10 +23,6 @@ void main() async{
   new pwa.Client();
   await Hive.openBox<Map>("favorites");
   await Hive.openBox<Map>("timestamps");
-  await Hive.openBox<Map>("animedownload");
-  await Hive.openBox<String>("downloadworks");
-  
-
   runApp(MyApp());
 }
 
@@ -73,10 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List dataSearch;
   List dataHomepage;
   String query;
-  var downloadfiles;
   int selectedIndex;
   Box<Map> favorites;
-  Box<Map> animedownload;
 
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
@@ -120,8 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     favorites = Hive.box<Map>("favorites");
-    animedownload = Hive.box<Map>("animedownload");
-    print(animedownload.values);
     getData_Homepage();
     selectedIndex = 0;
   }
@@ -167,11 +159,6 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case 3:
         return Column(
-          children: <Widget>[Expanded(child: getDownloads(),)],
-        );
-        break;
-      case 4:
-        return Column(
           children: <Widget>[getSettings()],
         );
         break;
@@ -213,10 +200,6 @@ class _MyHomePageState extends State<MyHomePage> {
           FFNavigationBarItem(
             iconData: Icons.favorite,
             label: 'Preferiti',
-          ),
-          FFNavigationBarItem(
-            iconData: Icons.file_download,
-            label: 'Download',
           ),
           FFNavigationBarItem(
             iconData: Icons.settings,
@@ -358,25 +341,6 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
-    Widget getDownloads(){
-      if (animedownload.values.length < 1) {
-        return Container(
-          child: Center(
-            child: Icon(Icons.file_download, size: 50, color: Colors.black12,),
-          ),
-        );
-      }
-      return ListView.separated(
-        itemCount: animedownload.values.length,
-        itemBuilder: (BuildContext context, int index) {
-          var anime = animedownload.getAt(index);
-          return DownloadCardMethod(anime["title"], anime["link"],anime["imageLink"]);
-        },
-        separatorBuilder: (context, index) {
-          return Divider();
-        },
-      );
-    }
     Widget getSettings(){
       return  Center(
           child: Column(
@@ -421,68 +385,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
       );
     }
-  DownloadCardMethod(title, Link, imageLink){
-    return Card(
-      elevation: 5,
-      child: InkWell(
-        splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeDownloadDisplay(Title: title, Link: Link,imageLink: imageLink, refreshmain: (){setState(() {print("dontask");});},),),);},
-        onLongPress: () {},
-        child: Padding(
-          padding: EdgeInsets.all(7),
-          child: Stack(children: <Widget>[
-            Align(
-              alignment: Alignment.centerRight,
-              child: Stack(
-                children: <Widget>[
-                  Padding(
-                      padding: const EdgeInsets.only(left: 10, top: 5),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Image(
-                                image: NetworkImage("https://static.wikia.nocookie.net/darling-in-the-franxx/images/b/b3/Zero_Two_appearance.jpg/revision/latest/scale-to-width-down/340?cb=20180807204943"),
-                                width: 100,),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Flexible(
-                                child: new Container(
-                                  margin: EdgeInsets.only(
-                                      left: 15, bottom: 150),
-                                  child: new Text(
-                                    title,
-                                    overflow: TextOverflow.clip,
-                                    style: new TextStyle(
-                                      fontSize: 18.0,
-                                      fontFamily: 'Roboto',
-                                      color: new Color(0xFF212121),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: 20,
-                              )
-                            ],
-                          ),
-
-                        ],
-                      ))
-                ],
-              ),
-            )
-          ]),
-        ),
-      ),
-    );
-  }
 
   }
 
