@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/functions/favoritemanager.dart';
+import 'package:animeworldapp/functions/favoritemanager.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';

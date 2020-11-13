@@ -4,7 +4,7 @@ import 'dart:isolate';
 import 'dart:ui';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/functions/favoritemanager.dart';
+import 'package:animeworldapp/functions/favoritemanager.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'dart:async';
