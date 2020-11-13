@@ -13,7 +13,6 @@ import 'widgets/homepage.dart';
 import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'pages/animedownloaded.dart';
-import 'package:cache_image/cache_image.dart';
 
 
 
@@ -68,6 +67,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String cors = "https://cors-anywhere.herokuapp.com/";
   List dataSearch;
   List dataHomepage;
   String query;
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
           Uri.encodeFull(
-              "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
+             cors + "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
                   query),
           headers: {"Accept": "application/json"});
 
@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String> getData_Homepage() async {
     var response = await http.get(
-        Uri.encodeFull("https://www.animeworld.tv/"));
+        Uri.encodeFull(cors+"https://www.animeworld.tv/"));
 
     setState(() {
       dataHomepage = Parsehtml_homepage(response.body);
@@ -311,9 +311,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: <Widget>[
                             Row(
                               children: <Widget>[
-                                Image(
-                                  image: CacheImage(imageLink),
-                                  width: 125,),
+                                Container(
+                                  child: Image(
+                                    image: NetworkImage(imageLink),
+                                    width: 125,),
+                                ),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -438,7 +440,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Row(
                             children: <Widget>[
                               Image(
-                                image: CacheImage(imageLink),
+                                image: NetworkImage(imageLink),
                                 width: 100,),
                               SizedBox(
                                 height: 10,

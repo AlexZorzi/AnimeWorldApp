@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/functions/favoritemanager.dart';
 import '../pages/animeInfo.dart';
-import 'package:cache_image/cache_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import '../functions/favoritemanager.dart';
