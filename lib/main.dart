@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'dart:isolate';
 import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:download_manager/download_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fontisto_flutter/fontisto_flutter.dart';
-import 'package:ota_update/ota_update.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'functions/favoritemanager.dart';
@@ -16,29 +12,19 @@ import 'widgets/SearchCard.dart';
 import 'widgets/homepage.dart';
 import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:cache_image/cache_image.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  var document = await getApplicationDocumentsDirectory();
-  Hive.init(document.path);
+  //Hive.init(document.path); not needed in web
   await Hive.openBox<Map>("favorites");
   await Hive.openBox<Map>("timestamps");
   await Hive.openBox<Map>("animedownload");
   await Hive.openBox<String>("downloadworks");
-  await Permission.storage.request();
-  FlutterDownloader.initialize(
-      debug: true // optional: set false to disable printing logs to console
-  );
+  
 
   runApp(MyApp());
 }
