@@ -13,7 +13,7 @@ import 'functions/favoritemanager.dart';
 import 'functions/html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'widgets/SearchCard.dart';
-import 'widgets/homepage.dart';
+import 'widgets/HomeCard.dart';
 import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
