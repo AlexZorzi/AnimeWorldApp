@@ -4,7 +4,6 @@ import '../pages/animeInfo.dart';
 import '../functions/favoritemanager.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:cache_image/cache_image.dart';
 class homepageitem extends StatelessWidget {
   final dataHomepage;
   final Box<Map> favorites;
@@ -43,7 +42,7 @@ class homepageitem extends StatelessWidget {
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Image(image: CacheImage(imageLink),fit: BoxFit.cover,)
+                child: Image(image: NetworkImage(imageLink),fit: BoxFit.cover,)
               ),
             ),
             Positioned(

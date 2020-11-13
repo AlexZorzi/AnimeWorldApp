@@ -9,7 +9,7 @@ import 'functions/favoritemanager.dart';
 import 'functions/html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'widgets/SearchCard.dart';
-import 'widgets/homepage.dart';
+import 'widgets/HomeCard.dart';
 import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'pages/animedownloaded.dart';
@@ -313,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: <Widget>[
                                 Container(
                                   child: Image(
-                                    image: NetworkImage(imageLink),
+                                    image: NetworkImage("https://static.wikia.nocookie.net/darling-in-the-franxx/images/b/b3/Zero_Two_appearance.jpg/revision/latest/scale-to-width-down/340?cb=20180807204943"),
                                     width: 125,),
                                 ),
                                 SizedBox(
@@ -440,7 +440,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Row(
                             children: <Widget>[
                               Image(
-                                image: NetworkImage(imageLink),
+                                image: NetworkImage("https://static.wikia.nocookie.net/darling-in-the-franxx/images/b/b3/Zero_Two_appearance.jpg/revision/latest/scale-to-width-down/340?cb=20180807204943"),
                                 width: 100,),
                               SizedBox(
                                 height: 10,
