@@ -17,7 +17,6 @@ import '../pages/videopage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
-import 'package:cache_image/cache_image.dart';
 
 class AnimeInfo extends StatefulWidget {
   final String Link;
@@ -36,6 +35,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
   Box<Map> timestamps;
   String animeid;
   List dataInfo;
+  String cors = "https://cors-anywhere.herokuapp.com/";
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
 
   Future<String> getData_Info() async {
       var response = await http.get(
-          Uri.encodeFull('https://www.animeworld.tv'+widget.Link));
+          Uri.encodeFull(cors+'https://www.animeworld.tv'+widget.Link));
 
       setState(() {
         dataInfo = Parsehtml_animeinfo(response.body);
@@ -152,6 +152,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                   children: <Widget>[
                     Image(image: NetworkImage(widget.imageLink),),
                     // using image cache here produces a flickering of the main image
+                    // web branch *toast*
                     // idk why further research is needed.
                     SizedBox(
                       height: 11,
