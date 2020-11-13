@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'functions/favoritemanager.dart';
 import 'functions/html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
+import 'widgets/FavoriteCard.dart';
 import 'widgets/SearchCard.dart';
 import 'widgets/HomeCard.dart';
 import 'pages/animeInfo.dart';
@@ -263,82 +264,15 @@ class _MyHomePageState extends State<MyHomePage> {
       itemBuilder: (BuildContext context, int index) {
         var anime = favorites.getAt(index);
         print(favorites.keys);
-        return FavoriteCardMethod(anime["title"], anime["link"],anime["imageLink"]);
+        return FavoriteCard(Title: anime["title"], Link: anime["link"], imageLink: anime["imageLink"], favorites: favorites, callback: (){setState(() {
+          print("refresh");
+        });});
       },
       separatorBuilder: (context, index) {
         return Divider();
       },
     );
   }
-
-
-    FavoriteCardMethod(title, Link, imageLink){
-    print(Link);
-      return Card(
-        elevation: 5,
-        child: InkWell(
-          splashColor: Colors.indigoAccent,
-          onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: title, Link: Link,imageLink: imageLink),),);},
-          onLongPress: () {setState(() {
-            FavManager(Link, imageLink, title, favorites, );
-          });},
-          child: Padding(
-            padding: EdgeInsets.all(7),
-            child: Stack(children: <Widget>[
-              Align(
-                alignment: Alignment.centerRight,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 5),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  child: Image(
-                                    image: NetworkImage("https://static.wikia.nocookie.net/darling-in-the-franxx/images/b/b3/Zero_Two_appearance.jpg/revision/latest/scale-to-width-down/340?cb=20180807204943"),
-                                    width: 125,),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Flexible(
-                                  child: new Container(
-                                    margin: EdgeInsets.only(
-                                        left: 15, bottom: 150),
-                                    child: new Text(
-                                      title,
-                                      overflow: TextOverflow.clip,
-                                      style: new TextStyle(
-                                        fontSize: 18.0,
-                                        fontFamily: 'Roboto',
-                                        color: new Color(0xFF212121),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                )
-                              ],
-                            ),
-
-                          ],
-                        ))
-                  ],
-                ),
-              )
-            ]),
-          ),
-        ),
-      );
-    }
 
     Widget getSettings(){
       return  Center(
