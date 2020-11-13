@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:isolate';
 import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:download_manager/download_manager.dart';
@@ -12,6 +10,7 @@ import 'dart:convert';
 import 'functions/favoritemanager.dart';
 import 'functions/html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
+import 'widgets/FavoriteCard.dart';
 import 'widgets/SearchCard.dart';
 import 'widgets/HomeCard.dart';
 import 'pages/animeInfo.dart';
@@ -82,6 +81,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String cors = "https://cors-anywhere.herokuapp.com/";
   List dataSearch;
   List dataHomepage;
   String query;
@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
           Uri.encodeFull(
-              "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
+             cors + "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
                   query),
           headers: {"Accept": "application/json"});
 
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String> getData_Homepage() async {
     var response = await http.get(
-        Uri.encodeFull("https://www.animeworld.tv/"));
+        Uri.encodeFull(cors+"https://www.animeworld.tv/"));
 
     setState(() {
       dataHomepage = Parsehtml_homepage(response.body);
@@ -293,7 +293,9 @@ class _MyHomePageState extends State<MyHomePage> {
       itemBuilder: (BuildContext context, int index) {
         var anime = favorites.getAt(index);
         print(favorites.keys);
-        return FavoriteCardMethod(anime["title"], anime["link"],anime["imageLink"]);
+        return FavoriteCard(Title: anime["title"], Link: anime["link"], imageLink: anime["imageLink"], favorites: favorites, callback: (){setState(() {
+          print("refresh");
+        });});
       },
       separatorBuilder: (context, index) {
         return Divider();
@@ -301,92 +303,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
-    FavoriteCardMethod(title, Link, imageLink){
-    print(Link);
-      return Card(
-        elevation: 5,
-        child: InkWell(
-          splashColor: Colors.indigoAccent,
-          onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: title, Link: Link,imageLink: imageLink),),);},
-          onLongPress: () {setState(() {
-            FavManager(Link, imageLink, title, favorites, );
-          });},
-          child: Padding(
-            padding: EdgeInsets.all(7),
-            child: Stack(children: <Widget>[
-              Align(
-                alignment: Alignment.centerRight,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 5),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Image(
-                                  image: CacheImage(imageLink),
-                                  width: 125,),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Flexible(
-                                  child: new Container(
-                                    margin: EdgeInsets.only(
-                                        left: 15, bottom: 150),
-                                    child: new Text(
-                                      title,
-                                      overflow: TextOverflow.clip,
-                                      style: new TextStyle(
-                                        fontSize: 18.0,
-                                        fontFamily: 'Roboto',
-                                        color: new Color(0xFF212121),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                )
-                              ],
-                            ),
-
-                          ],
-                        ))
-                  ],
-                ),
-              )
-            ]),
-          ),
-        ),
-      );
-    }
-
-    Widget getDownloads(){
-      if (animedownload.values.length < 1) {
-        return Container(
-          child: Center(
-            child: Icon(Icons.file_download, size: 50, color: Colors.black12,),
-          ),
-        );
-      }
-      return ListView.separated(
-        itemCount: animedownload.values.length,
-        itemBuilder: (BuildContext context, int index) {
-          var anime = animedownload.getAt(index);
-          return DownloadCardMethod(anime["title"], anime["link"],anime["imageLink"]);
-        },
-        separatorBuilder: (context, index) {
-          return Divider();
-        },
-      );
-    }
     Widget getSettings(){
       return  Center(
           child: Column(
