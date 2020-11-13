@@ -13,12 +13,14 @@ import 'widgets/HomeCard.dart';
 import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'pages/animedownloaded.dart';
+import 'package:pwa/client.dart' as pwa;
 
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   //Hive.init(document.path); not needed in web
+  new pwa.Client();
   await Hive.openBox<Map>("favorites");
   await Hive.openBox<Map>("timestamps");
   await Hive.openBox<Map>("animedownload");
