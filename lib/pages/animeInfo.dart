@@ -10,7 +10,6 @@ import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import '../globals/globals.dart' as globals;
 import '../functions/html_parse.dart';
 import '../widgets/EpisodeCard.dart';
 import '../pages/videopage.dart';
