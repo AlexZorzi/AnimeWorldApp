@@ -1,7 +1,9 @@
 import 'package:flick_video_player/flick_video_player.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'landscape_player_controls.dart';
@@ -25,6 +27,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   FlickManager flickManager;
   var Link;
   int Seeked;
+  int videoRotation;
   Box<Map> timestamps;
   String cors = "https://cors-anywhere.herokuapp.com/";
 
@@ -35,7 +38,6 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     timestamps = Hive.box<Map>("timestamps");
     print(timestamps.get(widget.animeid+widget.epnumber));
     getData_Video_web();
-
 
   }
 
@@ -82,33 +84,36 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
         flickManager.flickControlManager.addListener(() {seekto();});
         flickManager.flickVideoManager.addListener(() {savetemp(flickManager.flickVideoManager.videoPlayerValue.position,flickManager.flickVideoManager.videoPlayerValue.duration);});
 
-        return Scaffold(
-        backgroundColor: Colors.black,
-        body: WillPopScope(child:
-        Container(
-          alignment: Alignment.center,
-          child: AspectRatio(
-            aspectRatio: 16/9,
-            child: FlickVideoPlayer(
-              flickManager: flickManager,
-              preferredDeviceOrientation: [
-                DeviceOrientation.landscapeRight,
-                DeviceOrientation.landscapeLeft
-              ],
-              systemUIOverlay: [],
-              flickVideoWithControls: FlickVideoWithControls(
-                controls: LandscapePlayerControls(),
+        return RotatedBox(
+          quarterTurns: videoRotation,
+          child: Scaffold(
+          backgroundColor: Colors.black,
+          body: WillPopScope(child:
+          Container(
+            alignment: Alignment.center,
+            child: AspectRatio(
+              aspectRatio: 16/9,
+              child: FlickVideoPlayer(
+                flickManager: flickManager,
+                preferredDeviceOrientation: [
+                  DeviceOrientation.landscapeRight,
+                  DeviceOrientation.landscapeLeft
+                ],
+                systemUIOverlay: [],
+                flickVideoWithControls: FlickVideoWithControls(
+                  controls: LandscapePlayerControls(),
 
+                ),
               ),
             ),
-          ),
-        ), onWillPop: (){
-          SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-          SystemChrome.setPreferredOrientations(
-              [DeviceOrientation.portraitUp]);
-          Navigator.pop(context);
-        })
-      );
+          ), onWillPop: (){
+            SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+            SystemChrome.setPreferredOrientations(
+                [DeviceOrientation.portraitUp]);
+            Navigator.pop(context);
+          })
+      ),
+        );
     }
     else{
       return Container(
@@ -117,10 +122,22 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     }
   }
 
+  void checkRotation(context){
+    // Function Used to set the player rotation, 1  for phones and 0 for web
+    // value expressed in quarters
+    if(MediaQuery.of(context).size.width < MediaQuery.of(context).size.height){
+        videoRotation = 1;
+      }else{
+        videoRotation = 0;
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
-      return get_video();
+    setState(() {
+      checkRotation(context);
+    });
+    return get_video();
    }
 
 }
