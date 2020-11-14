@@ -30,7 +30,6 @@ class AnimeInfo extends StatefulWidget {
 }
 
 class _AnimeInfoState extends State<AnimeInfo> {
-  Box<Map> animedownload;
   Box<Map> timestamps;
   String animeid;
   List dataInfo;
@@ -41,7 +40,6 @@ class _AnimeInfoState extends State<AnimeInfo> {
     super.initState();
     getData_Info();
 
-    animedownload = Hive.box<Map>("animedownload");
     timestamps = Hive.box<Map>("timestamps");
     animeid = widget.Link.split("/")[2].split(".")[0];
     const oneSecond = const Duration(seconds: 2);
