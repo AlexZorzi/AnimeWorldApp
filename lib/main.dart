@@ -22,7 +22,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cache_image/cache_image.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 
 
