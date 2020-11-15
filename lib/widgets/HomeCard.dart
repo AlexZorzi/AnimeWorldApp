@@ -3,9 +3,9 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../pages/animeInfo.dart';
 import '../functions/favoritemanager.dart';
 import 'package:hive/hive.dart';
+import 'package:cache_image/cache_image.dart
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:cache_image/cache_image.dart';
-class homepageitem extends StatelessWidget {
+class homepageitem extends StatefulWidget {
   final dataHomepage;
   final Box<Map> favorites;
 
@@ -20,14 +20,49 @@ class homepageitem extends StatelessWidget {
       : super(key: ObjectKey(dataHomepage));
 
   @override
+  _homepageitemState createState() => _homepageitemState();
+}
+
+class _homepageitemState extends State<homepageitem> {
+  String Title;
+  String Link;
+  String animeid;
+  String imageLink;
+  String episodeNumber;
+  var favorites;
+  var hearticon;
+
+  @override
+  void initState(){
+    super.initState();
+    favorites = Hive.box<Map>("favorites");
+     Title = widget.dataHomepage[0];
+     Link = widget.dataHomepage[1];
+     animeid = Link.split("/")[2].split(".")[0];
+     imageLink = widget.dataHomepage[2];
+     episodeNumber = widget.dataHomepage[3];
+    animeid = Link.split("/")[2].split(".")[0];
+    isfavorite();
+  }
+
+  Widget isfavorite(){
+    if(favorites.get(animeid) == null){
+      setState(() {
+        hearticon = Icon(Icons.favorite_border, color: Colors.red,);
+      });
+    }else{
+      setState(() {
+        hearticon = Icon(Icons.favorite, color: Colors.red,);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String Title = dataHomepage[0];
-    String Link = dataHomepage[1];
-    String imageLink = dataHomepage[2];
-    String episodeNumber = dataHomepage[3];
+
     return GestureDetector(
       onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => AnimeInfo(Title: Title,Link: Link,imageLink: imageLink,)));},
-      onLongPress: () {FavManager(Link, imageLink, Title, favorites); print(imageLink);},
+      onLongPress: () {FavManager(Link, imageLink, Title, widget.favorites); print(imageLink); isfavorite();},
       child: Container(
         width: MediaQuery.of(context).size.width / 2.5,
         margin: EdgeInsets.only(right: 15,left: 15),
@@ -59,15 +94,21 @@ class homepageitem extends StatelessWidget {
                   ),
                   color: Colors.black45,
                 ),
-                child: Text(
-                  Title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 23,
-                  ),
-                  softWrap: true,
-                  maxLines: 2,
-                  overflow: TextOverflow.clip,
+                child: Row(
+                  children: [
+                    hearticon,
+                    SizedBox(width: 25,),
+                    Text(
+                      Title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 23,
+                      ),
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.clip,
+                    ),
+                  ],
                 ),
               ),
             ),
