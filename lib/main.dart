@@ -302,6 +302,25 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
+  Widget getDownloads(){
+    if (animedownload.values.length < 1) {
+      return Container(
+        child: Center(
+          child: Icon(Icons.file_download, size: 50, color: Colors.black12,),
+        ),
+      );
+    }
+    return ListView.separated(
+      itemCount: animedownload.values.length,
+      itemBuilder: (BuildContext context, int index) {
+        var anime = animedownload.getAt(index);
+        return DownloadCardMethod(anime["title"], anime["link"],anime["imageLink"]);
+      },
+      separatorBuilder: (context, index) {
+        return Divider();
+      },
+    );
+  }
 
     Widget getSettings(){
       return  Center(

@@ -3,7 +3,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../pages/animeInfo.dart';
 import '../functions/favoritemanager.dart';
 import 'package:hive/hive.dart';
-import 'package:cache_image/cache_image.dart
+import 'package:cache_image/cache_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 class homepageitem extends StatefulWidget {
   final dataHomepage;
