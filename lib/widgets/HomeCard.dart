@@ -93,22 +93,22 @@ class _homepageitemState extends State<homepageitem> {
                   ),
                   color: Colors.black45,
                 ),
-                child: Row(
+                child:Column(
                   children: [
-                    hearticon,
-                    SizedBox(width: 25,),
                     Text(
-                      Title,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 23,
-                      ),
-                      softWrap: true,
-                      maxLines: 2,
-                      overflow: TextOverflow.clip,
-                    ),
+                          Title,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.clip,
+                        ),
+                    hearticon,
                   ],
                 ),
+
               ),
             ),
             //Text("test"),
