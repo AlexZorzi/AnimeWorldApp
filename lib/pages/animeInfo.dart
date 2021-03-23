@@ -49,7 +49,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
 
   Future<String> getData_Info() async {
       var response = await http.get(
-          Uri.encodeFull(cors+'https://www.animeworld.tv'+widget.Link));
+          Uri.parse(cors+'https://www.animeworld.tv'+widget.Link));
 
       setState(() {
         dataInfo = Parsehtml_animeinfo(response.body);

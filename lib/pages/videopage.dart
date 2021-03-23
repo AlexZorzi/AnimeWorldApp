@@ -43,7 +43,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
   Future<String> getData_Video_web() async {
       var response = await http.get(
-          Uri.encodeFull(cors+"https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
+          Uri.parse(cors+"https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
 
       setState(() {
         Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");

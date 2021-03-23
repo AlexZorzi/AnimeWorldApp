@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<String> getData_Search() async {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
-          Uri.encodeFull(
+          Uri.parse(
              cors + "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
                   query),
           headers: {"Accept": "application/json"});
@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String> getData_Homepage() async {
     var response = await http.get(
-        Uri.encodeFull(cors+"https://www.animeworld.tv/"));
+        Uri.parse(cors+"https://www.animeworld.tv/"));
 
     setState(() {
       dataHomepage = Parsehtml_homepage(response.body);

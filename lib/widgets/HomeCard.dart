@@ -77,8 +77,9 @@ class _homepageitemState extends State<homepageitem> {
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Image(image: NetworkImage(imageLink),fit: BoxFit.cover,)
-              ),
+                child: CachedNetworkImage(imageUrl: imageLink, fit: BoxFit.cover),
+
+               ),
             ),
             Positioned(
               bottom: 0,
