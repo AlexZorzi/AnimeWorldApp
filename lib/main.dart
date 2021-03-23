@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:download_manager/download_manager.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,9 @@ import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:cache_image/cache_image.dart';
 
 
 
@@ -102,9 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<String> getData_Search() async {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
-          Uri.encodeFull(
-             "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
-                  query),
+          Uri.parse("https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +query),
           headers: {"Accept": "application/json"});
 
       setState(() {
@@ -118,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String> getData_Homepage() async {
     var response = await http.get(
-        Uri.encodeFull("https://www.animeworld.tv/"));
+        Uri.parse("https://www.animeworld.tv/"));
 
     setState(() {
       dataHomepage = Parsehtml_homepage(response.body);
@@ -384,9 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              Image(
-                                image: CacheImage(imageLink),
-                                width: 100,),
+                              CachedNetworkImage(imageUrl: imageLink, width: 100,),
                               SizedBox(
                                 height: 10,
                               ),

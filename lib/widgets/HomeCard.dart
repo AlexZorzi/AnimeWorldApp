@@ -1,9 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../pages/animeInfo.dart';
 import '../functions/favoritemanager.dart';
 import 'package:hive/hive.dart';
-import 'package:cache_image/cache_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 class homepageitem extends StatefulWidget {
   final dataHomepage;
@@ -78,8 +78,9 @@ class _homepageitemState extends State<homepageitem> {
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Image(image: CacheImage(imageLink),fit: BoxFit.cover,)
-              ),
+                child: CachedNetworkImage(imageUrl: imageLink, fit: BoxFit.cover),
+
+               ),
             ),
             Positioned(
               bottom: 0,

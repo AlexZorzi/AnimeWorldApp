@@ -14,7 +14,6 @@ import '../widgets/EpisodeCard.dart';
 import '../pages/videopage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:cache_image/cache_image.dart';
 
 class AnimeDownloadDisplay extends StatefulWidget {
   final String Link;
@@ -47,7 +46,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
 
   Future<String> getData_Info() async {
     var response = await http.get(
-        Uri.encodeFull('https://www.animeworld.tv'+widget.Link));
+        Uri.parse('https://www.animeworld.tv'+widget.Link));
 
     setState(() {
       dataInfo = Parsehtml_animeinfo(response.body);
