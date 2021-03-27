@@ -1,3 +1,5 @@
 # AnimeWorldApp
 
-App Non ufficiale di AnimeWorld
+
+# TODO
+cors-anywhere alternative
