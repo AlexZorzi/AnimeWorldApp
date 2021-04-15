@@ -4,6 +4,9 @@ App Non ufficiale di AnimeWorld
 
 Guarda anime da AnimeWorld.tv senza pubblicità.
 
+# Web Cors
+Per via della policy CORS dei browsers (Chrome,Safari,IE,Firefox) deve essere utilizzato il proxy di (cors-anywhere)[https://github.com/Rob--W/cors-anywhere]
+
 # Features
 - Download degli episodi
 - Preferiti
