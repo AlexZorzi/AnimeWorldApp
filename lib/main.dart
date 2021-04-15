@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
           Uri.parse(
-             cors + Uri.encodeComponent("https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" + query)),
+             cors + "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" + query),
           headers: {"Accept": "application/json"});
 
       setState(() {

@@ -148,7 +148,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
   Future<String> getData_Video(RawLink) async {
     var response = await http.get(
 
-        Uri.parse(cors+Uri.encodeComponent("https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink)));
+        Uri.parse(cors+"https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink));
     var Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
     print(Link);
     return Link;
