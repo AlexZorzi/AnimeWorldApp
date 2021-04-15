@@ -33,7 +33,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
   Box<Map> timestamps;
   String animeid;
   List dataInfo;
-  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
+  String cors = "https://alexzorzi.it:8080/";
 
   @override
   void initState() {

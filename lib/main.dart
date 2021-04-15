@@ -65,7 +65,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
+  String cors = "https://alexzorzi.it:8080/";
   List dataSearch;
   List dataHomepage;
   String query;

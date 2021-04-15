@@ -31,7 +31,7 @@ class _homepageitemState extends State<homepageitem> {
   String episodeNumber;
   var favorites;
   var hearticon;
-  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
+  String cors = "https://alexzorzi.it:8080/";
 
 
   @override

@@ -29,7 +29,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   int Seeked;
   int videoRotation;
   Box<Map> timestamps;
-  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
+  String cors = "https://alexzorzi.it:8080/";
 
   @override
   void initState() {

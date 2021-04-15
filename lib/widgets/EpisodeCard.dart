@@ -36,7 +36,7 @@ class EpisodeCard extends StatefulWidget{
 class _EpisodeCardState extends State<EpisodeCard> {
   var progress;
   Box<Map> timestamps;
-  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
+  String cors = "https://alexzorzi.it:8080/";
 
 
   var videosource;
