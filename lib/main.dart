@@ -65,7 +65,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String cors = "https://cors-anywhere.herokuapp.com/";
+  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
   List dataSearch;
   List dataHomepage;
   String query;
@@ -87,8 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
           Uri.parse(
-             cors + "https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +
-                  query),
+             cors + Uri.encodeComponent("https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" + query)),
           headers: {"Accept": "application/json"});
 
       setState(() {

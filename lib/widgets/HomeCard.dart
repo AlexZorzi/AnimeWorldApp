@@ -31,6 +31,8 @@ class _homepageitemState extends State<homepageitem> {
   String episodeNumber;
   var favorites;
   var hearticon;
+  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
+
 
   @override
   void initState(){
@@ -78,7 +80,7 @@ class _homepageitemState extends State<homepageitem> {
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: CachedNetworkImage(imageUrl: imageLink, fit: BoxFit.cover),
+                child: CachedNetworkImage(imageUrl: cors+imageLink, fit: BoxFit.cover),
 
                ),
             ),

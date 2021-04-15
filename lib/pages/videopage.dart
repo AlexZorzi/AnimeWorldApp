@@ -29,7 +29,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   int Seeked;
   int videoRotation;
   Box<Map> timestamps;
-  String cors = "https://cors-anywhere.herokuapp.com/";
+  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
   Future<String> getData_Video_web() async {
       var response = await http.get(
-          Uri.parse(cors+"https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
+          Uri.parse(cors+Uri.encodeComponent("https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink)));
 
       setState(() {
         Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");

@@ -33,7 +33,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
   Box<Map> timestamps;
   String animeid;
   List dataInfo;
-  String cors = "https://cors-anywhere.herokuapp.com/";
+  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
 
   @override
   void initState() {
@@ -147,7 +147,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
         body: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Image(image: NetworkImage(widget.imageLink),),
+                    Image(image: NetworkImage(cors+widget.imageLink),),
                     // using image cache here produces a flickering of the main image
                     // web branch *toast*
                     // idk why further research is needed.

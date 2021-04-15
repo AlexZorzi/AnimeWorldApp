@@ -36,7 +36,7 @@ class EpisodeCard extends StatefulWidget{
 class _EpisodeCardState extends State<EpisodeCard> {
   var progress;
   Box<Map> timestamps;
-  String cors = "https://cors-anywhere.herokuapp.com/";
+  String cors = "https://alexzorzi.it/pwa_api/mirror.php?url=";
 
 
   var videosource;
@@ -147,7 +147,8 @@ class _EpisodeCardState extends State<EpisodeCard> {
 
   Future<String> getData_Video(RawLink) async {
     var response = await http.get(
-        Uri.parse(cors+"https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink),headers: {"x-requested-with": "XMLHttpRequest"});
+
+        Uri.parse(cors+Uri.encodeComponent("https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink)));
     var Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
     print(Link);
     return Link;
