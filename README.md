@@ -15,6 +15,6 @@ Guarda anime da AnimeWorld.tv senza pubblicità.
 
 
 # Contatti
+[Alz_8bit](https://t.me/alz_8bit)
 
-    [Alz_8bit](https://t.me/alz_8bit)
-    [Update Channel](https://t.me/animeworldapp)
+[Update Channel](https://t.me/animeworldapp)
