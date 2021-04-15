@@ -59,7 +59,7 @@ List Parsehtml_animeinfo(html_search_api) {
       if(servername == 9 || servername == 10 || servername == 5) {
         var serverdiv = htmldoc.querySelector('div[data-name="${servername.toString()}"]')
             .getElementsByClassName("episodes range");
-        var serverep = [];
+        List<List<String>> serverep = [];
         for (var eprange in serverdiv) {
           for (var ep in eprange.getElementsByClassName("episode")) {
             var epid = ep.getElementsByTagName("a")[0].attributes["data-id"];
