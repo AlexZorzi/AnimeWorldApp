@@ -2,4 +2,3 @@
 
 
 # TODO
-cors-anywhere alternative
