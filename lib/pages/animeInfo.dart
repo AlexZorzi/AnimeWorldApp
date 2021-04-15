@@ -124,17 +124,12 @@ class _AnimeInfoState extends State<AnimeInfo> {
       );
     }
 
-    return ListView.separated(
-      itemCount: dataInfo[5][0]?.length,
-      itemBuilder: (BuildContext context, int index) {
-        // episodenumber dataInfo[5][0][index][0]
-        // episodelink dataInfo[5][0][index][1]
-        // eparrey
-        return EpisodeCard(episodeNumber: dataInfo[5][0][index][0], episodeLink: dataInfo[5][0][index][1], eparray: dataInfo[5], animeid: animeid,Link: widget.Link, Title: widget.Title, imageLink: widget.imageLink,);
-      },
-      separatorBuilder: (context, index) {
-        return Divider();
-      },
+    List<EpisodeCard> cards = [];
+    for(int index = 0; index < dataInfo[5][0].length; ++index){
+      cards.add(EpisodeCard(episodeNumber: dataInfo[5][0][index][0], episodeLink: dataInfo[5][0][index][1], eparray: dataInfo[5], animeid: animeid,Link: widget.Link, Title: widget.Title, imageLink: widget.imageLink,));
+    }
+    return Column(
+      children: cards,
     );
   }
 
