@@ -11,10 +11,7 @@ Guarda anime da AnimeWorld.tv senza pubblicità.
 - No Ads
 
 # Screenshots
-![home](https://i.imgur.com/d1nTaBu.png)
-![search](https://i.imgur.com/tHTgghR.png)
-![fav](https://i.imgur.com/oHpUfze.png)
-![info](https://i.imgur.com/Fghay43.png)
+<img src="https://i.imgur.com/D1q8yqh.jpeg" style="display:inline-block; width:25%;">
 
 
 # Contatti
