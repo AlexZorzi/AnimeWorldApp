@@ -10,6 +10,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:hive/hive.dart';
+import 'package:animeworldapp/globals/globals.dart' as globals;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:animeworldapp/functions/favoritemanager.dart';
@@ -234,7 +235,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
 
   Future<String> getData_Video(RawLink) async {
     var response = await http.get(
-        Uri.parse("https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink),headers: {"x-requested-with": "XMLHttpRequest","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"});
+        Uri.parse("https://www.animeworld.tv/api/episode/info?alt=0&id="+RawLink),headers: {"x-requested-with": "XMLHttpRequest","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"}..addAll(globals.AWCookieTest));
     var Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
     print(Link);
     return Link;

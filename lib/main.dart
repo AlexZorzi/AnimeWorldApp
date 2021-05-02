@@ -8,6 +8,7 @@ import 'package:fontisto_flutter/fontisto_flutter.dart';
 import 'package:ota_update/ota_update.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'globals/globals.dart' as globals;
 import 'functions/favoritemanager.dart';
 import 'functions/html_parse.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
@@ -86,12 +87,27 @@ class _MyHomePageState extends State<MyHomePage> {
   int selectedIndex;
   Box<Map> favorites;
   Box<Map> animedownload;
-
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
 
 
+  Future<Map<String, String>> getCookie() async{
+    var response = await http.get(Uri.parse("https://www.animeworld.tv/"),);
+    String cookie = ParseAWCookieTest(response.body);
+    return {"cookie": cookie};
+  }
+
+  Future<String> getData_Homepage() async {
+    globals.AWCookieTest = await getCookie();
+    var response = await http.get(
+        Uri.parse("https://www.animeworld.tv/"),headers: globals.AWCookieTest);
+
+    setState(() {
+      dataHomepage = Parsehtml_homepage(response.body);
+    });
+    return "Success";
+  }
 
   void changeQuery(String text) {
     query = myController.text;
@@ -102,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
           Uri.parse("https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +query),
-          headers: {"Accept": "application/json"});
+          headers: {"Accept": "application/json"}..addAll(globals.AWCookieTest));
 
       setState(() {
         dataSearch = Parsehtml_search(json.decode(response.body)['html']);
@@ -113,22 +129,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<String> getData_Homepage() async {
-    var response = await http.get(
-        Uri.parse("https://www.animeworld.tv/"));
-
-    setState(() {
-      dataHomepage = Parsehtml_homepage(response.body);
-    });
-    return "Success";
-  }
 
   @override
   void initState() {
     super.initState();
     favorites = Hive.box<Map>("favorites");
     animedownload = Hive.box<Map>("animedownload");
-    print(animedownload.values);
     getData_Homepage();
     selectedIndex = 0;
   }

@@ -1,19 +1,11 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:animeworldapp/functions/favoritemanager.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
-import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import '../functions/html_parse.dart';
 import '../widgets/EpisodeCard.dart';
-import '../pages/videopage.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:animeworldapp/globals/globals.dart' as globals;
 
 class AnimeDownloadDisplay extends StatefulWidget {
   final String Link;
@@ -46,7 +38,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
 
   Future<String> getData_Info() async {
     var response = await http.get(
-        Uri.parse('https://www.animeworld.tv'+widget.Link));
+        Uri.parse('https://www.animeworld.tv'+widget.Link), headers: globals.AWCookieTest);
 
     setState(() {
       dataInfo = Parsehtml_animeinfo(response.body);

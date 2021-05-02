@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
+import 'package:animeworldapp/globals/globals.dart' as globals;
 import 'dart:convert';
 import 'landscape_player_controls.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:flutter/services.dart';
 
 
 class LandscapePlayer extends StatefulWidget {
@@ -45,7 +44,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
 
   Future<String> getData_Video_web() async {
       var response = await http.get(
-          Uri.parse("https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"});
+          Uri.parse("https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"}..addAll(globals.AWCookieTest));
 
       setState(() {
         Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
