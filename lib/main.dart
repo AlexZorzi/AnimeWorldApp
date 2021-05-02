@@ -1,4 +1,8 @@
 import 'dart:ui';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+
+import 'globals/globals.dart' as globals;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:download_manager/download_manager.dart';
@@ -86,12 +90,24 @@ class _MyHomePageState extends State<MyHomePage> {
   int selectedIndex;
   Box<Map> favorites;
   Box<Map> animedownload;
-
+  Map<String, String> cookie;
   final globalKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   final snackbarQuery = SnackBar(content: Text('Inserisci almeno 1 lettera.'));
 
+   Future<Map<String, String>> getTestCookie() async{
+     final cookieManager = new WebviewCookieManager();
+     var magic = await cookieManager.getCookies("https://www.animeworld.tv/");
+     return {"cookie": "AWCookieTest="+magic[1].value+";"};
+     /*final flutterWebviewPlugin = new FlutterWebviewPlugin();
+     await flutterWebviewPlugin.launch("https://www.animeworld.tv/",hidden: true);
+     var magic = await flutterWebviewPlugin.getCookies();
+     return {"cookie": "AWCookieTest="+magic["\"AWCookieTest"]+";"};
+     flutterWebviewPlugin.close();
+     flutterWebviewPlugin.dispose();
+    */
 
+   }
 
   void changeQuery(String text) {
     query = myController.text;
@@ -102,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.length >= 1 && query != Null) {
       var response = await http.get(
           Uri.parse("https://www.animeworld.tv/api/search?sort=year%3Adesc&keyword=" +query),
-          headers: {"Accept": "application/json"});
+          headers: {"Accept": "application/json"}..addAll(this.cookie));
 
       setState(() {
         dataSearch = Parsehtml_search(json.decode(response.body)['html']);
@@ -114,8 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String> getData_Homepage() async {
+     this.cookie = await getTestCookie();
+     globals.cookie = this.cookie;
     var response = await http.get(
-        Uri.parse("https://www.animeworld.tv/"));
+        Uri.parse("https://www.animeworld.tv/"), headers: this.cookie);
 
     setState(() {
       dataHomepage = Parsehtml_homepage(response.body);
@@ -128,7 +146,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     favorites = Hive.box<Map>("favorites");
     animedownload = Hive.box<Map>("animedownload");
-    print(animedownload.values);
     getData_Homepage();
     selectedIndex = 0;
   }

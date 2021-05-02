@@ -41,6 +41,8 @@ dependencies:
   beauty_textfield:
   file_utils: ^1.0.0
   permission_handler:
+  webview_cookie_manager:
+  flutter_webview_plugin:
   skeleton_text: ^3.0.0
   circular_custom_loader:
   flutter_rounded_progress_bar:
