@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart' show parse;
 
 String ParseAWCookieTest(body_homepage){
-  var re = RegExp(r'AWCookietest=[^;]+;');
+  var re = RegExp(r'AWCookieVerify=[^;]+;');
   var match = re.firstMatch(body_homepage);
   if (match != null){
     return match.group(0).replaceAll(" ", ""); // last " " breaks cookie
