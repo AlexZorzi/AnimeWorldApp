@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:download_manager/download_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fontisto_flutter/fontisto_flutter.dart';
