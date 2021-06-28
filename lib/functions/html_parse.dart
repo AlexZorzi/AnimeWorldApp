@@ -88,7 +88,8 @@ List Parsehtml_animeinfo(html_search_api) {
   var rating = htmldoc.getElementById("average-vote").text;
   var lenghteps = htmldoc.getElementsByTagName("dl")[1].children[3].text;
   var status = htmldoc.getElementsByTagName("dl")[1].getElementsByTagName("a")[0].text;
-  for (var gen in htmldoc.getElementsByTagName("dl")[0].children[11].getElementsByTagName("a")) {
+  var dl = htmldoc.getElementsByTagName("dl")[0].children[2];
+  for (var gen in dl.getElementsByTagName("a")) {
     genre.add(gen.text);
   }
   print(episodes[0]);
