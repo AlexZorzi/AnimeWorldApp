@@ -23,24 +23,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ff_navigation_bar: ^0.1.4
-  http: ^0.13.1
-  json_annotation: ^4.0.1
-  html: ^0.15.0
+  ff_navigation_bar:
+  http:
+  json_annotation:
+  html:
   expansion_card:
   cached_network_image:
   smart_grid_view:
   flutter_staggered_animations:
   carousel_slider:
   flick_video_player:
-  hive: ^2.0.0
-  hive_flutter: ^1.0.0
+  hive:
+  hive_flutter:
   flutter_downloader: 1.5.0
-  path_provider: ^2.0.1
+  path_provider:
   beauty_textfield:
-  file_utils: ^1.0.0
   permission_handler:
-  skeleton_text: ^3.0.0
+  skeleton_text:
   circular_custom_loader:
   flutter_rounded_progress_bar:
   url_launcher:
