@@ -24,25 +24,25 @@ dependencies:
   flutter:
     sdk: flutter
   salomon_bottom_bar: 3.2.0
-  http:
-  json_annotation:
-  html:
-  expansion_card:
-  cached_network_image:
-  smart_grid_view:
-  flutter_staggered_animations:
-  carousel_slider:
-  flick_video_player:
-  hive:
-  hive_flutter:
+  http: 0.13.4
+  json_annotation: 4.4.0
+  html: 0.15.0
+  expansion_card: 0.1.0
+  cached_network_image: 3.2.0
+  smart_grid_view: 0.2.1
+  flutter_staggered_animations: 1.0.0
+  carousel_slider: 4.0.0
+  flick_video_player: 0.3.1
+  hive: 2.0.5
+  hive_flutter: 1.1.0
   flutter_downloader: ^1.7.1
-  beauty_textfield:
-  permission_handler:
-  skeleton_text:
-  circular_custom_loader:
-  flutter_rounded_progress_bar:
-  url_launcher:
-  fontisto_flutter:
+  beauty_textfield: 0.0.1 # Please deprecate me
+  permission_handler: 8.3.0
+  skeleton_text: ^3.0.0
+  circular_custom_loader: 1.0.6
+  flutter_rounded_progress_bar: 0.2.0
+  url_launcher: 6.0.18
+  fontisto_flutter: 3.1.2
 
 
 
