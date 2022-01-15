@@ -196,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(
           "AnimeWorld very legit",
-          style: Theme.of(context).textTheme.headline5,
+          style: TextStyle(color: Colors.white, fontSize: 18),
 
         ),
       ),
