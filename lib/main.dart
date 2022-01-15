@@ -319,19 +319,19 @@ class _MyHomePageState extends State<MyHomePage> {
               InkWell(
                 child: ListTile(
                   leading: Icon(
-                    Istos.trello,
-                    color: Colors.deepPurple,
+                    Istos.github,
+                    color: Colors.black,
                   ),
-                  title: Text("Trello"),
+                  title: Text("Github"),
                   trailing: Icon(Icons.open_in_new),
                 ),
                 onTap: () async {
-                  const trello_url = "https://trello.com/b/Tfw7RQsw/animeword-app";
-                  if (await canLaunch(trello_url))
-                    await launch(trello_url);
+                  const github_url = "https://github.com/AlexZorzi/AnimeWorldApp";
+                  if (await canLaunch(github_url))
+                    await launch(github_url);
                   else
                     // can't launch url, there is some error
-                    throw "Could not launch $trello_url";
+                    throw "Could not launch $github_url";
                 },
               ),
               InkWell(
