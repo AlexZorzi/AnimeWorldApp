@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.alles.animeworld.animeworldapp">
+    package="com.alles.animeworld">
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
 
     <application
 
-        android:label="animeworldapp"
+        android:label="AnimeWorldApp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

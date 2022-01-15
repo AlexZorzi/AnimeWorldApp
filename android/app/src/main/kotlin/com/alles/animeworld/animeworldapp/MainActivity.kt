@@ -1,4 +1,4 @@
-package com.alles.animeworld.animeworldapp
+package com.alles.animeworld
 
 import io.flutter.embedding.android.FlutterActivity
 
