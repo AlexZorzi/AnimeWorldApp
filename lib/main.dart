@@ -1,23 +1,18 @@
-import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fontisto_flutter/fontisto_flutter.dart';
-import 'package:ota_update/ota_update.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'globals/globals.dart' as globals;
-import 'functions/favoritemanager.dart';
 import 'functions/html_parse.dart';
-import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'widgets/FavoriteCard.dart';
 import 'widgets/SearchCard.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'widgets/HomeCard.dart';
-import 'pages/animeInfo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -33,12 +28,14 @@ void main() async{
   await Hive.openBox<Map>("animedownload");
   await Hive.openBox<String>("downloadworks");
   await Permission.storage.request();
-  FlutterDownloader.initialize(
+  await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
   );
-
+  await FlutterDownloader.registerCallback(callback);
   runApp(MyApp());
 }
+
+void callback(String id, DownloadTaskStatus status, int progress) {}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -196,43 +193,36 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
-        title: Text("AnimeWorld very legit"),
+        title: Text(
+          "AnimeWorld very legit",
+          style: Theme.of(context).textTheme.headline5,
+
+        ),
       ),
       body: _indexManager(),
-      bottomNavigationBar: FFNavigationBar(
-        theme: FFNavigationBarTheme(
-          barBackgroundColor: Colors.white,
-          selectedItemBorderColor: Colors.indigo,
-          selectedItemBackgroundColor: Colors.indigo,
-          selectedItemIconColor: Colors.white,
-          selectedItemLabelColor: Colors.black,
-        ),
-        selectedIndex: selectedIndex,
-        onSelectTab: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
+      bottomNavigationBar: SalomonBottomBar(
+        currentIndex: selectedIndex,
+        onTap: (i) => setState(() => selectedIndex = i),
         items: [
-          FFNavigationBarItem(
-            iconData: Icons.home,
-            label: 'Home',
+          SalomonBottomBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
           ),
-          FFNavigationBarItem(
-            iconData: Icons.search,
-            label: 'Cerca',
+          SalomonBottomBarItem(
+            icon: Icon(Icons.search),
+            title: Text('Cerca'),
           ),
-          FFNavigationBarItem(
-            iconData: Icons.favorite,
-            label: 'Preferiti',
+          SalomonBottomBarItem(
+            icon: Icon(Icons.favorite),
+            title: Text('Preferiti'),
           ),
-          FFNavigationBarItem(
-            iconData: Icons.file_download,
-            label: 'Download',
+          SalomonBottomBarItem(
+            icon: Icon(Icons.file_download),
+            title: Text('Download'),
           ),
-          FFNavigationBarItem(
-            iconData: Icons.settings,
-            label: 'Settings',
+          SalomonBottomBarItem(
+            icon: Icon(Icons.settings),
+            title: Text('Settings'),
           ),
         ],
       ),

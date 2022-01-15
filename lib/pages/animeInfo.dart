@@ -146,7 +146,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                         children: <Widget>[
                           Text(
                             widget.Title,
-                            style: Theme.of(context).textTheme.headline,
+                            style: Theme.of(context).textTheme.headline5,
                           ),
                           SizedBox(
                             height: 7.0,

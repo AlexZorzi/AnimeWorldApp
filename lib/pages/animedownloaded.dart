@@ -147,7 +147,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
                   children: <Widget>[
                     Text(
                       widget.Title,
-                      style: Theme.of(context).textTheme.headline,
+                      style: Theme.of(context).textTheme.headline5,
                     ),
                     SizedBox(
                       height: 7.0,
@@ -166,7 +166,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
                             ),
                             Text(
                               getData_Status(),
-                              style: Theme.of(context).textTheme.subhead,
+                              style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ],
                         ),
@@ -178,7 +178,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
                             ),
                             Text(
                               getData_Rating(),
-                              style: Theme.of(context).textTheme.subhead,
+                              style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ],
                         ),
@@ -190,7 +190,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
                             ),
                             Text(
                               getData_Lenghteps(),
-                              style: Theme.of(context).textTheme.subhead,
+                              style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ],
                         ),

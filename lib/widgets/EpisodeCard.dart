@@ -259,6 +259,9 @@ class _EpisodeCardState extends State<EpisodeCard> {
         openFileFromNotification: false).then((workidd) => {
           downloadworks.put(widget.animeid+widget.episodeNumber, workidd)
     });
+
+
+
     setState(() {
       workid = downloadworks.get(widget.animeid+widget.episodeNumber);
       videosource = File(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4");
@@ -268,6 +271,8 @@ class _EpisodeCardState extends State<EpisodeCard> {
       );
     });
   }
+
+
 
   void deleterequest(animelink,epnumber) async {
     String localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download' + Platform.pathSeparator + animelink;
