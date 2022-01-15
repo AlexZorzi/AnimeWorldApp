@@ -38,6 +38,7 @@ void main() async{
 void callback(String id, DownloadTaskStatus status, int progress) {}
 
 class MyApp extends StatelessWidget {
+  static const String AppVersion = "1.1.3";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -352,6 +353,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     throw "Could not launch $telegram_url";
                 },
               ),
+            Text("Version: "+MyApp.AppVersion)
             ],
           ),
       );
