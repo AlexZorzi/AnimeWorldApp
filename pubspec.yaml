@@ -27,12 +27,12 @@ dependencies:
   http: 0.13.4
   json_annotation: 4.4.0
   html: 0.15.0
+  better_player: ^0.0.81
   expansion_card: 0.1.0
   cached_network_image: 3.2.0
   smart_grid_view: 0.2.1
   flutter_staggered_animations: 1.0.0
   carousel_slider: 4.0.0
-  flick_video_player: 0.3.1
   hive: 2.0.5
   hive_flutter: 1.1.0
   flutter_downloader: ^1.7.1

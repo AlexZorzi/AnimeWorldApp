@@ -1,11 +1,9 @@
-import 'package:flick_video_player/flick_video_player.dart';
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:animeworldapp/globals/globals.dart' as globals;
 import 'dart:convert';
-import 'landscape_player_controls.dart';
 import 'package:hive/hive.dart';
 
 
@@ -21,14 +19,23 @@ class LandscapePlayer extends StatefulWidget {
 }
 
 class _LandscapePlayerState extends State<LandscapePlayer> {
-  FlickManager flickManager;
+  BetterPlayerController videoManager;
   var Link;
   int Seeked;
   Box<Map> timestamps;
+  var betterPlayerConfiguration;
 
   @override
   void initState() {
     super.initState();
+    betterPlayerConfiguration = BetterPlayerConfiguration(
+      fullScreenByDefault: true,
+      controlsConfiguration: BetterPlayerControlsConfiguration(
+        enablePip: true,
+        enableFullscreen: false,
+      ),
+    );
+
     Seeked = 0;
     timestamps = Hive.box<Map>("timestamps");
     print(timestamps.get(widget.animeid+widget.epnumber));
@@ -54,46 +61,53 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
  
   @override
   void dispose() {
-    flickManager.dispose();
+    videoManager.dispose();
     super.dispose();
   }
 
-  Future<void> seekto(){
-    if(flickManager.flickVideoManager.isPlaying && Seeked != 1){
+  Duration seekto(){
+    if(videoManager.isPlaying() && Seeked != 1 ){
       Seeked = 1;
       var lasttimestamp = timestamps.get(widget.animeid+widget.epnumber);
       print(lasttimestamp);
       if(lasttimestamp != null){
-         flickManager.flickControlManager.seekTo(Duration(seconds: lasttimestamp["timestamp"]));
+         return Duration(seconds: lasttimestamp["timestamp"]);
+      }else{
+        return Duration(seconds: 0);
       }
     }
   }
-  void savetemp(Duration timestamp,Duration durationvideo){
+  void savetemp(){
     if(Seeked != 0){
-      timestamps.put(widget.animeid+widget.epnumber,{"duration":durationvideo.inSeconds,"timestamp":timestamp.inSeconds});
+      Duration position =  videoManager.videoPlayerController.value.position;
+      Duration duration =  videoManager.videoPlayerController.value.duration;
+      print("Duration "+duration.inSeconds.toString()+" Position "+position.inSeconds.toString());
+      timestamps.put(widget.animeid+widget.epnumber,{"duration":duration.inSeconds,"timestamp":position.inSeconds});
       print(timestamps.get(widget.animeid+widget.epnumber));
       widget.refreshinfo();
     }
   }
 
-  Widget get_video(){
+  void quitplayer(){
+    if (!videoManager.isFullScreen){
+      //Navigator.pop(context);
+    }
+  }
+
+  Widget get_video() {
     if(Link != null){
-        if(Link is String){
-
-          flickManager = FlickManager(
-            videoPlayerController:
-            VideoPlayerController.network(Link),
-          );
+      BetterPlayerDataSource source;
+      if(Link is String){
+        source = BetterPlayerDataSource(BetterPlayerDataSourceType.network, Link);
         }else{
-          flickManager = FlickManager(
-            videoPlayerController:
-            VideoPlayerController.file(Link),
-
-          );
+        source = BetterPlayerDataSource(BetterPlayerDataSourceType.file, Link);
         }
-        flickManager.flickControlManager.addListener(() {seekto();});
-        flickManager.flickVideoManager.addListener(() {savetemp(flickManager.flickVideoManager.videoPlayerValue.position,flickManager.flickVideoManager.videoPlayerValue.duration);});
-
+      videoManager = BetterPlayerController(betterPlayerConfiguration, betterPlayerDataSource: source);
+      videoManager.enterFullScreen();
+      videoManager.addEventsListener((p0) => seekto());
+      videoManager.addEventsListener((p0) => quitplayer());
+      videoManager.addEventsListener((p0) => savetemp());
+      videoManager.play();
         return Scaffold(
         backgroundColor: Colors.black,
         body: WillPopScope(child:
@@ -101,21 +115,11 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
           alignment: Alignment.center,
           child: AspectRatio(
             aspectRatio: 16/9,
-            child: FlickVideoPlayer(
-              flickManager: flickManager,
-              preferredDeviceOrientation: [
-                DeviceOrientation.landscapeRight,
-                DeviceOrientation.landscapeLeft
-              ],
-              systemUIOverlay: [],
-              flickVideoWithControls: FlickVideoWithControls(
-                controls: LandscapePlayerControls(),
-
-              ),
-            ),
+            child: BetterPlayer(controller: videoManager),
           ),
-        ), onWillPop: (){
-          SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        ),
+            onWillPop: (){
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
           SystemChrome.setPreferredOrientations(
               [DeviceOrientation.portraitUp]);
           Navigator.pop(context);
