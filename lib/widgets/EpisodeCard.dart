@@ -48,10 +48,12 @@ class _EpisodeCardState extends State<EpisodeCard> {
   var workid;
   var existsbool;
   var mytimer;
+  bool isNetwork;
   @override
   void initState(){
     super.initState();
     downloadprogress = 0;
+    isNetwork = true;
     timestamps = Hive.box<Map>("timestamps");
     animedownload = Hive.box<Map>("animedownload");
     downloadworks = Hive.box<String>("downloadworks");
@@ -114,6 +116,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
     if(!File(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4").existsSync()){
       setState(() {
         videosource = widget.episodeLink;
+        isNetwork = true;
         doiexistWid = InkWell(
           child: Icon(Icons.file_download),
           onTap: (){pathrequest(widget.episodeLink, widget.Link.split("/")[2].split(".")[0], widget.episodeNumber);},
@@ -122,7 +125,8 @@ class _EpisodeCardState extends State<EpisodeCard> {
     }
     else{
       setState(() {
-        videosource = File(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4");
+        videosource = localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4";
+        isNetwork = false;
         doiexistWid = InkWell(
           child: Icon(Icons.delete_forever),
           onTap: (){deleterequest(widget.animeid,widget.episodeNumber);},
@@ -165,7 +169,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(RawLink: videosource, epnumber: widget.episodeNumber, animeid: widget.animeid,refreshinfo: (){setState(() {getProgress();});},),),);},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(isNetwork: isNetwork, RawDataSource: videosource, epnumber: widget.episodeNumber, animeid: widget.animeid,refreshinfo: (){setState(() {getProgress();});},),),);},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[
@@ -264,7 +268,8 @@ class _EpisodeCardState extends State<EpisodeCard> {
 
     setState(() {
       workid = downloadworks.get(widget.animeid+widget.episodeNumber);
-      videosource = File(localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4");
+      videosource = localPathtry+"/"+widget.episodeNumber+widget.animeid+".mp4";
+      isNetwork = false;
       doiexistWid = InkWell(
         child: Icon(Icons.delete_forever),
         onTap: (){deleterequest(widget.animeid,widget.episodeNumber);},
