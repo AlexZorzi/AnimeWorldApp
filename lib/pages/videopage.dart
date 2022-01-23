@@ -52,13 +52,20 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
       deviceOrientationsOnFullScreen: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
       controlsConfiguration: BetterPlayerControlsConfiguration(
         enablePip: true,
-        enableFullscreen: true,
-        pipMenuIcon: Icons.add_to_home_screen,
+        enableFullscreen: false,
+        enablePlaybackSpeed: false,
+        enableSubtitles: false,
+        enableQualities: false,
+        enableAudioTracks:false,
         overflowMenuCustomItems: [
             BetterPlayerOverflowMenuItem(
             Icons.picture_in_picture,
             "Picture In Picture",
                 () => videoManager.enablePictureInPicture(betterPlayerKey)),
+          BetterPlayerOverflowMenuItem(
+              Icons.cancel,
+              "Quit",
+                  () => quitplayer()),
           ],
       ),
     );
@@ -111,9 +118,9 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   }
 
   void quitplayer(){
-    if (!videoManager.isFullScreen){
-      //Navigator.pop(context);
-    }
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    Navigator.pop(context);
   }
 
   Widget get_video() {
