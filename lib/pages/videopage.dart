@@ -1,121 +1,151 @@
-import 'package:flick_video_player/flick_video_player.dart';
+import 'dart:io';
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:animeworldapp/globals/globals.dart' as globals;
 import 'dart:convert';
-import 'landscape_player_controls.dart';
 import 'package:hive/hive.dart';
 
 
 class LandscapePlayer extends StatefulWidget {
-  LandscapePlayer({Key key, this.RawLink, this.epnumber, this.animeid, this.refreshinfo}) : super(key: key);
+  bool isNetwork;
   final Function refreshinfo;
-  final RawLink;
+  final String RawDataSource;
   final epnumber;
   final animeid;
+
+  LandscapePlayer({Key key, this.RawDataSource, this.isNetwork, this.epnumber, this.animeid, this.refreshinfo}) : super(key: key);
+
 
   @override
   _LandscapePlayerState createState() => _LandscapePlayerState();
 }
 
 class _LandscapePlayerState extends State<LandscapePlayer> {
-  FlickManager flickManager;
+  BetterPlayerController videoManager;
   var Link;
-  int Seeked;
   Box<Map> timestamps;
+  var betterPlayerConfiguration;
+  BetterPlayerDataSource source;
+  GlobalKey betterPlayerKey;
 
   @override
   void initState() {
     super.initState();
-    Seeked = 0;
     timestamps = Hive.box<Map>("timestamps");
     print(timestamps.get(widget.animeid+widget.epnumber));
-    if(widget.RawLink is String){
+
+    setSource();
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    betterPlayerConfiguration = BetterPlayerConfiguration(
+      //fullScreenByDefault: true,
+      startAt: seekto(),
+      fit: BoxFit.contain,
+      deviceOrientationsAfterFullScreen: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
+      deviceOrientationsOnFullScreen: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
+      controlsConfiguration: BetterPlayerControlsConfiguration(
+        enablePip: true,
+        enableFullscreen: false,
+        enablePlaybackSpeed: false,
+        enableSubtitles: false,
+        enableQualities: false,
+        enableAudioTracks:false,
+        overflowMenuCustomItems: [
+            BetterPlayerOverflowMenuItem(
+            Icons.picture_in_picture,
+            "Picture In Picture",
+                () => videoManager.enablePictureInPicture(betterPlayerKey)),
+          BetterPlayerOverflowMenuItem(
+              Icons.cancel,
+              "Quit",
+                  () => quitplayer()),
+          ],
+      ),
+    );
+
+
+  }
+
+  void setSource() {
+    if(widget.isNetwork){
       getData_Video_web();
     }else{
       setState(() {
-        Link = widget.RawLink;
+        source = BetterPlayerDataSource(BetterPlayerDataSourceType.file, widget.RawDataSource );
       });
     }
-
   }
 
   Future<String> getData_Video_web() async {
       var response = await http.get(
-          Uri.parse("https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawLink),headers: {"x-requested-with": "XMLHttpRequest","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"}..addAll(globals.AWCookieTest));
-
+          Uri.parse("https://www.animeworld.tv/api/episode/info?alt=0&id="+widget.RawDataSource),headers: {"x-requested-with": "XMLHttpRequest","user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"}..addAll(globals.AWCookieTest));
+          String link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
       setState(() {
-        Link = json.decode(response.body)['grabber'].replaceAll("http", "https").replaceAll("httpss", "https");
+        source = BetterPlayerDataSource(BetterPlayerDataSourceType.network, link);
         print(Link);
       });
   }
  
   @override
   void dispose() {
-    flickManager.dispose();
+    videoManager.dispose();
     super.dispose();
   }
 
-  Future<void> seekto(){
-    if(flickManager.flickVideoManager.isPlaying && Seeked != 1){
-      Seeked = 1;
+  Duration seekto(){
       var lasttimestamp = timestamps.get(widget.animeid+widget.epnumber);
       print(lasttimestamp);
       if(lasttimestamp != null){
-         flickManager.flickControlManager.seekTo(Duration(seconds: lasttimestamp["timestamp"]));
+         return Duration(seconds: lasttimestamp["timestamp"]);
+      }else{
+        return Duration(seconds: 0);
       }
-    }
   }
-  void savetemp(Duration timestamp,Duration durationvideo){
-    if(Seeked != 0){
-      timestamps.put(widget.animeid+widget.epnumber,{"duration":durationvideo.inSeconds,"timestamp":timestamp.inSeconds});
+  void savetemp(){
+      Duration position =  videoManager.videoPlayerController.value.position;
+      Duration duration =  videoManager.videoPlayerController.value.duration;
+      print("Duration "+duration.inSeconds.toString()+" Position "+position.inSeconds.toString());
+      timestamps.put(widget.animeid+widget.epnumber,{"duration":duration.inSeconds,"timestamp":position.inSeconds});
       print(timestamps.get(widget.animeid+widget.epnumber));
       widget.refreshinfo();
-    }
   }
 
-  Widget get_video(){
-    if(Link != null){
-        if(Link is String){
+  void quitplayer(){
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    Navigator.pop(context);
+  }
 
-          flickManager = FlickManager(
-            videoPlayerController:
-            VideoPlayerController.network(Link),
-          );
-        }else{
-          flickManager = FlickManager(
-            videoPlayerController:
-            VideoPlayerController.file(Link),
-
-          );
-        }
-        flickManager.flickControlManager.addListener(() {seekto();});
-        flickManager.flickVideoManager.addListener(() {savetemp(flickManager.flickVideoManager.videoPlayerValue.position,flickManager.flickVideoManager.videoPlayerValue.duration);});
+  Widget get_video() {
+    if(source != null){
+      videoManager = BetterPlayerController(betterPlayerConfiguration, betterPlayerDataSource: source);
+      videoManager.play();
+      GlobalKey _betterPlayerKey = GlobalKey();
+      videoManager.addEventsListener((p0) => savetemp());
+      videoManager.addEventsListener((p0) => SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []));
 
         return Scaffold(
         backgroundColor: Colors.black,
         body: WillPopScope(child:
-        Container(
-          alignment: Alignment.center,
-          child: AspectRatio(
-            aspectRatio: 16/9,
-            child: FlickVideoPlayer(
-              flickManager: flickManager,
-              preferredDeviceOrientation: [
-                DeviceOrientation.landscapeRight,
-                DeviceOrientation.landscapeLeft
-              ],
-              systemUIOverlay: [],
-              flickVideoWithControls: FlickVideoWithControls(
-                controls: LandscapePlayerControls(),
-
+            RotatedBox(
+              quarterTurns: 0,
+              child:  Container(
+                alignment: Alignment.center,
+                child: AspectRatio(
+                  aspectRatio: 16/9,
+                  child: BetterPlayer(controller: videoManager, key: _betterPlayerKey),
+                ),
               ),
             ),
-          ),
-        ), onWillPop: (){
-          SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+            onWillPop: (){
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
           SystemChrome.setPreferredOrientations(
               [DeviceOrientation.portraitUp]);
           Navigator.pop(context);
