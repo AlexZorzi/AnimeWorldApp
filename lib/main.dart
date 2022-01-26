@@ -353,6 +353,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     throw "Could not launch $telegram_url";
                 },
               ),
+              InkWell(
+                child: ListTile(
+                  leading: Icon(
+                    Istos.heart,
+                    color: Colors.pinkAccent,
+                  ),
+                  title: Text("Thank the Dev"),
+                  trailing: Icon(Icons.open_in_new),
+                ),
+                onTap: () async {
+                  const paypal_url = "https://paypal.me/allesdev";
+                  if (await canLaunch(paypal_url))
+                    await launch(paypal_url);
+                  else
+                    // can't launch url, there is some error
+                    throw "Could not launch $paypal_url";
+                },
+              ),
             Text("Version: "+MyApp.AppVersion)
             ],
           ),
