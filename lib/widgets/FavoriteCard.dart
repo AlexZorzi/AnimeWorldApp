@@ -57,7 +57,6 @@ class _FavoriteCardState extends State<FavoriteCard>{
                                     style: new TextStyle(
                                       fontSize: 18.0,
                                       fontFamily: 'Roboto',
-                                      color: new Color(0xFF212121),
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

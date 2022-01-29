@@ -87,7 +87,6 @@ class _SearchCardState extends State<SearchCard>{
                                         style: TextStyle(
                                           fontSize: 18.0,
                                           fontFamily: 'Roboto',
-                                          color: Color(0xFF212121),
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

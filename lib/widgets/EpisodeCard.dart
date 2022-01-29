@@ -198,7 +198,6 @@ class _EpisodeCardState extends State<EpisodeCard> {
                                         style: new TextStyle(
                                           fontSize: 18.0,
                                           fontFamily: 'Roboto',
-                                          color: new Color(0xFF212121),
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

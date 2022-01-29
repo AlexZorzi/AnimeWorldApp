@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:fontisto_flutter/fontisto_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -29,6 +30,7 @@ void main() async{
   await Hive.openBox<String>("downloadworks");
   //await Permission.storage.request();
   await FlutterDownloader.initialize(
+
       debug: true // optional: set false to disable printing logs to console
   );
   await FlutterDownloader.registerCallback(callback);
@@ -42,26 +44,43 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AnimeWorld App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        brightness: Brightness.light,
-        primaryColor: Colors.lightBlue[800],
-        accentColor: Colors.cyan[600],
-
+    return AdaptiveTheme(
+        light: ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.blue,
+          primaryColor: Colors.lightBlue[800],
+          accentColor: Colors.cyan[600],
+          fontFamily: 'Georgia',
+            textTheme: TextTheme(
+              headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+              headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+              bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+            )
+        ),
+        dark: ThemeData(
+          brightness: Brightness.dark,
+          backgroundColor: Colors.grey[500],
+          appBarTheme: AppBarTheme(backgroundColor: Colors.red),
+          primarySwatch: Colors.red,
+          primaryColor: Colors.red,
+          accentColor: Colors.amber,
+          fontFamily: 'Georgia',
+            textTheme: TextTheme(
+              headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+              headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+              bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+            )
+        ),
+        initial: AdaptiveThemeMode.light, builder: (theme, darkTheme) => MaterialApp(
+        title: 'AnimeWorld App',
+        debugShowCheckedModeBanner: false,
+        theme: theme,
+        darkTheme: darkTheme,
         // Define the default font family.
-        fontFamily: 'Georgia',
-
+        home: MyHomePage(title: 'AnimeWorld App'),),
         // Define the default TextTheme. Use this to specify the default
         // text styling for headlines, titles, bodies of text, and more.
-        textTheme: TextTheme(
-        headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-        headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-        bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-      )),
-      home: MyHomePage(title: 'AnimeWorld App'),
+
     );
   }
 
@@ -134,6 +153,8 @@ class _MyHomePageState extends State<MyHomePage> {
     animedownload = Hive.box<Map>("animedownload");
     getData_Homepage();
     selectedIndex = 0;
+
+
   }
 
 
@@ -157,6 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 400,
                 child: TextField(
                   decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: myController.clear,
+                      icon: Icon(Icons.clear),),
                     contentPadding: const EdgeInsets.all(20.0),
                       hintText: 'Cerca Anime',
                     focusedBorder: InputBorder.none,
@@ -260,14 +284,15 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
       return GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10.0,
-          shrinkWrap: true,
-          children: List.generate(dataHomepage.length, (index) {
-                    print(dataHomepage[index]);
-                   return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
-              },
-          ),
+        crossAxisCount: 2,
+        mainAxisSpacing: 10.0,
+        shrinkWrap: true,
+        padding: EdgeInsets.only(top: 10, bottom: 10),
+        children: List.generate(dataHomepage.length, (index) {
+          print(dataHomepage[index]);
+          return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
+        },
+        ),
       );
   }
 
@@ -371,6 +396,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     throw "Could not launch $paypal_url";
                 },
               ),
+              InkWell(
+                child: ListTile(
+                  leading: Icon(
+                    Istos.circle_o_notch,
+                    color: Colors.black,
+                  ),
+                  title: Text("Theme"),
+                  trailing: Icon(Icons.open_in_new),
+                ),
+                onTap: () async { AdaptiveTheme.of(context).toggleThemeMode();
+
+                },
+              ),
             Text("Version: "+MyApp.AppVersion)
             ],
           ),
@@ -410,7 +448,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     style: new TextStyle(
                                       fontSize: 18.0,
                                       fontFamily: 'Roboto',
-                                      color: new Color(0xFF212121),
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

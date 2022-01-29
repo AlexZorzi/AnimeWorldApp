@@ -130,7 +130,6 @@ class _AnimeInfoState extends State<AnimeInfo> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
