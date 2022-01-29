@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:better_player/better_player.dart';
+import 'package:wakelock/wakelock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +37,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     print(timestamps.get(widget.animeid+widget.epnumber));
 
     setSource();
-
+    Wakelock.enable();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
@@ -57,6 +57,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
         enableSubtitles: false,
         enableQualities: false,
         enableAudioTracks:false,
+        controlsHideTime: Duration(seconds: 5),
         overflowMenuCustomItems: [
             BetterPlayerOverflowMenuItem(
             Icons.picture_in_picture,
@@ -95,6 +96,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
  
   @override
   void dispose() {
+    Wakelock.disable();
     videoManager.dispose();
     super.dispose();
   }
@@ -120,6 +122,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
   void quitplayer(){
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    Wakelock.disable();
     Navigator.pop(context);
   }
 
@@ -144,12 +147,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
                 ),
               ),
             ),
-            onWillPop: (){
-          SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-          SystemChrome.setPreferredOrientations(
-              [DeviceOrientation.portraitUp]);
-          Navigator.pop(context);
-        })
+            onWillPop: (){quitplayer();})
       );
     }
     else{
