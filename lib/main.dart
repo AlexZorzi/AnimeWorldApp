@@ -281,14 +281,15 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
       return GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10.0,
-          shrinkWrap: true,
-          children: List.generate(dataHomepage.length, (index) {
-                    print(dataHomepage[index]);
-                   return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
-              },
-          ),
+        crossAxisCount: 2,
+        mainAxisSpacing: 10.0,
+        shrinkWrap: true,
+        padding: EdgeInsets.only(top: 10, bottom: 10),
+        children: List.generate(dataHomepage.length, (index) {
+          print(dataHomepage[index]);
+          return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
+        },
+        ),
       );
   }
 
