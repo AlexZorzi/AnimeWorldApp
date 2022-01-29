@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -12,7 +13,6 @@ class AnimeInfo extends StatefulWidget {
   final String Link;
   final String Title;
   final String imageLink;
-
 
   const AnimeInfo({Key key, this.Title, this.Link, this.imageLink}) : super(key: key);
 
@@ -71,8 +71,13 @@ class _AnimeInfoState extends State<AnimeInfo> {
       );
     }
     else{
-      return Text(dataInfo[3],style: Theme.of(context).textTheme.caption);
-
+      return ExpandableText(
+        dataInfo[3],
+        expandText: 'show more',
+        collapseText: 'show less',
+        maxLines: 1,
+        linkColor: Theme.of(context).primaryColor,
+      );
     }
   }
   Widget getData_Status(){
@@ -147,6 +152,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
                             widget.Title,
                             style: Theme.of(context).textTheme.headline5,
                           ),
+                          getData_Desc(),
                           SizedBox(
                             height: 7.0,
                           ),
