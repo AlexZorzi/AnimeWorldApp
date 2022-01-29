@@ -43,6 +43,7 @@ dependencies:
   flutter_rounded_progress_bar: 0.2.0
   url_launcher: 6.0.18
   fontisto_flutter: 3.1.2
+  wakelock: ^0.5.6
 
 
 
