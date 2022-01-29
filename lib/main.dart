@@ -178,6 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 400,
                 child: TextField(
                   decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: myController.clear,
+                      icon: Icon(Icons.clear),),
                     contentPadding: const EdgeInsets.all(20.0),
                       hintText: 'Cerca Anime',
                     focusedBorder: InputBorder.none,
