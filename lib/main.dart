@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<String> getData_Homepage() async {
     globals.AWCookieTest = await getCookie();
     var response = await http.get(
-        Uri.parse("https://www.animeworld.tv/"),headers: globals.AWCookieTest);
+        Uri.parse("https://www.animeworld.tv/ongoing"),headers: globals.AWCookieTest);
 
     setState(() {
       dataHomepage = Parsehtml_homepage(response.body);

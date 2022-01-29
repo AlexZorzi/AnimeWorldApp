@@ -28,7 +28,6 @@ class _homepageitemState extends State<homepageitem> {
   String Link;
   String animeid;
   String imageLink;
-  String episodeNumber;
   var favorites;
   var hearticon;
 
@@ -40,7 +39,6 @@ class _homepageitemState extends State<homepageitem> {
      Link = widget.dataHomepage[1];
      animeid = Link.split("/")[2].split(".")[0];
      imageLink = widget.dataHomepage[2];
-     episodeNumber = widget.dataHomepage[3];
     animeid = Link.split("/")[2].split(".")[0];
     isfavorite();
   }

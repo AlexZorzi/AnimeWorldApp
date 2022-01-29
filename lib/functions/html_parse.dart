@@ -47,12 +47,11 @@ List Parsehtml_homepage(html_search_api){
   var divs = htmldoc.getElementsByClassName("film-list")[0].getElementsByClassName("inner");
   var returnable = [];
   for(var div in divs){
-    var a = div.getElementsByClassName("poster")[0];
-    var name = a.attributes["title"].split("Ep")[0];
-    var episodeNumber = a.attributes["title"].split("Ep")[1];
+    var a = div.getElementsByClassName("name")[0];
+    var name = a.text;
     var link = a.attributes["href"];
     var img = div.getElementsByTagName("img")[0].attributes["src"];
-    returnable.add([name,link,img,episodeNumber]);
+    returnable.add([name,link,img]);
   }
   return returnable;
 }
