@@ -68,10 +68,6 @@ class _homepageitemState extends State<homepageitem> {
         margin: EdgeInsets.only(right: 15,left: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.0),
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 5.0, color: Colors.grey[400], offset: Offset(0, 3))
-          ],
         ),
         child: Stack(
           children: <Widget>[
