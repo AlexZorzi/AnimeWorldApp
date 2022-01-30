@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
+import 'package:animeworldapp/pages/videopageDesktop.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:animeworldapp/pages/videopage.dart';
@@ -169,7 +170,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(isNetwork: isNetwork, RawDataSource: videosource, epnumber: widget.episodeNumber, animeid: widget.animeid,refreshinfo: (){setState(() {getProgress();});},),),);},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayerDesktop(isNetwork: isNetwork, RawDataSource: videosource, epnumber: widget.episodeNumber, animeid: widget.animeid,refreshinfo: (){setState(() {getProgress();});},),),);},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[

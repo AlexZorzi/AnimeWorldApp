@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -6,6 +7,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:fontisto_flutter/fontisto_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'globals/globals.dart' as globals;
 import 'functions/html_parse.dart';
 import 'widgets/FavoriteCard.dart';
@@ -16,7 +18,6 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 
 
@@ -29,11 +30,10 @@ void main() async{
   await Hive.openBox<Map>("animedownload");
   await Hive.openBox<String>("downloadworks");
   //await Permission.storage.request();
-  await FlutterDownloader.initialize(
+  if (!Platform.isAndroid || !Platform.isIOS){
+    DartVLC.initialize();
+  }
 
-      debug: true // optional: set false to disable printing logs to console
-  );
-  await FlutterDownloader.registerCallback(callback);
   runApp(MyApp());
 }
 
@@ -284,10 +284,10 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
       return GridView.count(
-        crossAxisCount: 2,
         mainAxisSpacing: 10.0,
         shrinkWrap: true,
         padding: EdgeInsets.only(top: 10, bottom: 10),
+        crossAxisCount: 6,
         children: List.generate(dataHomepage.length, (index) {
           print(dataHomepage[index]);
           return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);

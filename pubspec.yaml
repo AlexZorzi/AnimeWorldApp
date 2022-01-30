@@ -46,6 +46,8 @@ dependencies:
   wakelock: ^0.5.6
   adaptive_theme: 2.3.0
   expandable_text: 2.2.0
+  dart_vlc: ^0.1.6
+
 
 
 
