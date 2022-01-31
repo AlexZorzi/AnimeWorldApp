@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:fontisto_flutter/fontisto_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:window_manager/window_manager.dart';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'globals/globals.dart' as globals;
@@ -23,6 +24,9 @@ import 'pages/animedownloaded.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  // Must add this line.
+  await windowManager.ensureInitialized();
+
   var document = await getApplicationDocumentsDirectory();
   Hive.init(document.path);
   await Hive.openBox<Map>("favorites");

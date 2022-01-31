@@ -135,6 +135,7 @@ class _AnimeInfoState extends State<AnimeInfo> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
