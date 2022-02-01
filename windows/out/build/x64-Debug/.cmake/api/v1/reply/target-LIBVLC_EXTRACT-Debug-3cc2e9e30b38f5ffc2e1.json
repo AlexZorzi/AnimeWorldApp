@@ -1,0 +1,35 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target"
+		],
+		"files" : 
+		[
+			"flutter/ephemeral/.plugin_symlinks/dart_vlc/dartvlc/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 21,
+				"parent" : 0
+			}
+		]
+	},
+	"id" : "LIBVLC_EXTRACT::@17184caebe928f5445f4",
+	"name" : "LIBVLC_EXTRACT",
+	"paths" : 
+	{
+		"build" : "dart_vlc_core",
+		"source" : "flutter/ephemeral/.plugin_symlinks/dart_vlc/dartvlc"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:skeleton_text/skeleton_text.dart';
@@ -130,11 +131,13 @@ class _AnimeInfoState extends State<AnimeInfo> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
 
     return SafeArea(
       child: Scaffold(
+        appBar: Platform.isAndroid || Platform.isIOS ? null : AppBar(),
         body: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[

@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:fontisto_flutter/fontisto_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:window_manager/window_manager.dart';
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'globals/globals.dart' as globals;
 import 'functions/html_parse.dart';
 import 'widgets/FavoriteCard.dart';
@@ -16,7 +19,6 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'pages/animedownloaded.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 
 
@@ -29,18 +31,24 @@ void main() async{
   await Hive.openBox<Map>("animedownload");
   await Hive.openBox<String>("downloadworks");
   //await Permission.storage.request();
-  await FlutterDownloader.initialize(
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS){
+    await windowManager.ensureInitialized();
+    DartVLC.initialize();
+  }else{
+    await FlutterDownloader.initialize(
 
-      debug: true // optional: set false to disable printing logs to console
-  );
-  await FlutterDownloader.registerCallback(callback);
+        debug: true // optional: set false to disable printing logs to console
+    );
+    await FlutterDownloader.registerCallback(callback);
+  }
+
   runApp(MyApp());
 }
 
 void callback(String id, DownloadTaskStatus status, int progress) {}
 
 class MyApp extends StatelessWidget {
-  static const String AppVersion = "1.1.4";
+  static const String AppVersion = "1.1.5";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -283,11 +291,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     }
+      int AxisCount;
+      if (Platform.isIOS || Platform.isAndroid){
+        AxisCount = 2;
+      }else{
+        AxisCount = 6;
+      }
       return GridView.count(
-        crossAxisCount: 2,
         mainAxisSpacing: 10.0,
         shrinkWrap: true,
         padding: EdgeInsets.only(top: 10, bottom: 10),
+        crossAxisCount: AxisCount,
         children: List.generate(dataHomepage.length, (index) {
           print(dataHomepage[index]);
           return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
@@ -319,6 +333,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
   Widget getDownloads(){
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS){
+      return Container(
+        child: Center(
+          child: Text("COMING SOON ON DESKTOP!"),
+        ),
+      );
+    }
     if (animedownload.values.length < 1) {
       return Container(
         child: Center(

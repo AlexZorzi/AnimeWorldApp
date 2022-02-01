@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -13,8 +12,6 @@ import 'package:hive/hive.dart';
 import 'package:animeworldapp/globals/globals.dart' as globals;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:animeworldapp/functions/favoritemanager.dart';
-import 'package:circular_custom_loader/circular_custom_loader.dart';
 
 
 
@@ -59,19 +56,21 @@ class _EpisodeCardState extends State<EpisodeCard> {
     downloadworks = Hive.box<String>("downloadworks");
     workid = downloadworks.get(widget.animeid+widget.episodeNumber);
     print(workid);
-    doiexist();
+      doiexist();
+      const oneSecond = const Duration(seconds: 2);
+      mytimer = Timer.periodic(oneSecond, (Timer t) => setState((){
+        if(workid != null){
+          FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
+            downloadprogress = value[0].progress
+          });
+          FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
+            downloadstatus = value[0].status
+          });
+        }
+      }));
+
     getProgress();
-    const oneSecond = const Duration(seconds: 2);
-    mytimer = Timer.periodic(oneSecond, (Timer t) => setState((){
-      if(workid != null){
-        FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
-          downloadprogress = value[0].progress
-        });
-        FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
-          downloadstatus = value[0].status
-        });
-      }
-    }));
+
   }
 
 
@@ -105,7 +104,9 @@ class _EpisodeCardState extends State<EpisodeCard> {
 
   @override
   void dispose() {
-    mytimer.cancel();
+    if (Platform.isAndroid || Platform.isAndroid ) {
+      mytimer.cancel();
+    }
     super.dispose();
   }
 
@@ -117,10 +118,18 @@ class _EpisodeCardState extends State<EpisodeCard> {
       setState(() {
         videosource = widget.episodeLink;
         isNetwork = true;
-        doiexistWid = InkWell(
-          child: Icon(Icons.file_download),
-          onTap: (){pathrequest(widget.episodeLink, widget.Link.split("/")[2].split(".")[0], widget.episodeNumber);},
-        );
+        if (Platform.isAndroid || Platform.isIOS ) {
+          doiexistWid = InkWell(
+            child: Icon(Icons.file_download),
+            onTap: () {
+              pathrequest(
+                  widget.episodeLink, widget.Link.split("/")[2].split(".")[0],
+                  widget.episodeNumber);
+            },
+          );
+        }else{
+          doiexistWid = null;
+        }
       });
     }
     else{
@@ -140,9 +149,10 @@ class _EpisodeCardState extends State<EpisodeCard> {
 
   Widget getProgress(){
     var timedata = timestamps.get(widget.animeid+widget.episodeNumber);
-    double percentage;
+    double percentage = 0.0;
     if(timedata != null){
       percentage = (timedata["timestamp"] / timedata["duration"] * 100);
+      if (percentage.isNaN){percentage = 0.0;}
       setState(() {
         progress = Expanded(
           child:  RoundedProgressBar(
