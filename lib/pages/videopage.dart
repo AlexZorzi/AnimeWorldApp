@@ -104,7 +104,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     if (widget.isNetwork) {
       String link = await getData_Video_web();
       setState(() {
-        sourceDesktop = Media.network(link);
+        sourceDesktop = Media.network(link, startTime: seekto());
       });
     } else {
       setState(() {
