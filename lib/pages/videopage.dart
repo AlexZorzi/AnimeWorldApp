@@ -133,11 +133,19 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
     Uri uri = Uri.parse("https://www.animeworld.tv/api/episode/info?alt=0&id=" +
         widget.RawDataSource);
     var response = await http.get(uri);
-    String link = json
-        .decode(response.body)['grabber']
-        .replaceAll("http", "https")
-        .replaceAll("httpss", "https");
-    return link;
+    String link;
+    if (Platform.isWindows){
+      link = json
+          .decode(response.body)['grabber']
+          .replaceAll("https", "http"); //TODO http for now cuz VLC on windows dosent like TLS
+
+    }else{
+      link = json
+          .decode(response.body)['grabber']
+          .replaceAll("http", "https")
+          .replaceAll("httpss", "https");
+    }
+     return link;
   }
 
   @override
