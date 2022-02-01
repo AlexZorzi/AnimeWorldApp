@@ -39,7 +39,6 @@ class _LandscapePlayerDesktopState extends State<LandscapePlayerDesktop> {
   @override
   void initState() {
     super.initState();
-    WindowManager.instance.setFullScreen(true);
     timestamps = Hive.box<Map>("timestamps");
     print(timestamps.get(widget.animeid + widget.epnumber));
 
@@ -130,23 +129,49 @@ class _LandscapePlayerDesktopState extends State<LandscapePlayerDesktop> {
       });
 
       return Scaffold(
-          backgroundColor: Colors.black,
-          appBar: AppBar(toolbarHeight: 10,),
-          body: WillPopScope(
-                child: RotatedBox(
-                  quarterTurns: 0,
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Video(player: player),
-                    ),
-                  ),
-                ),
-                onWillPop: () {
+        backgroundColor: Colors.black,
+        body: WillPopScope(
+          child: Stack(children: [
+            Container(
+              alignment: Alignment.center,
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Video(player: player),
+              ),
+            ),
+            Positioned(
+              right: 20,
+              top: 10,
+              child: GestureDetector(
+                onTap: () {
                   quitplayer();
-                })
-          );
+                },
+                child: Icon(
+                  Icons.cancel,
+                  size: 30,
+                  color: Colors.white38,
+                ),
+              ),
+            ),
+            Positioned(
+              right: 65,
+              top: 10,
+              child: GestureDetector(
+                onTap: () async {
+                  bool isfullscreen =
+                      await WindowManager.instance.isFullScreen();
+                  WindowManager.instance.setFullScreen(!isfullscreen);
+                },
+                child: Icon(
+                  Icons.fullscreen,
+                  size: 30,
+                  color: Colors.white38,
+                ),
+              ),
+            ),
+          ]),
+        ),
+      );
     } else {
       return Container();
     }

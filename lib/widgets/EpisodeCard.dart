@@ -141,9 +141,10 @@ class _EpisodeCardState extends State<EpisodeCard> {
 
   Widget getProgress(){
     var timedata = timestamps.get(widget.animeid+widget.episodeNumber);
-    double percentage;
+    double percentage = 0.0;
     if(timedata != null){
       percentage = (timedata["timestamp"] / timedata["duration"] * 100);
+      if (percentage.isNaN){percentage = 0.0;}
       setState(() {
         progress = Expanded(
           child:  RoundedProgressBar(
