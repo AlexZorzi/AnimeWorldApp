@@ -31,7 +31,7 @@ void main() async{
   await Hive.openBox<Map>("animedownload");
   await Hive.openBox<String>("downloadworks");
   //await Permission.storage.request();
-  if (Platform.isMacOS || Platform.isLinux || Platform.isMacOS){
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS){
     await windowManager.ensureInitialized();
     DartVLC.initialize();
   }else{
