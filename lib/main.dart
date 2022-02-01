@@ -24,9 +24,6 @@ import 'pages/animedownloaded.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  // Must add this line.
-  await windowManager.ensureInitialized();
-
   var document = await getApplicationDocumentsDirectory();
   Hive.init(document.path);
   await Hive.openBox<Map>("favorites");
@@ -34,8 +31,15 @@ void main() async{
   await Hive.openBox<Map>("animedownload");
   await Hive.openBox<String>("downloadworks");
   //await Permission.storage.request();
-  if (!Platform.isAndroid || !Platform.isIOS){
+  if (Platform.isMacOS || Platform.isLinux || Platform.isMacOS){
+    await windowManager.ensureInitialized();
     DartVLC.initialize();
+  }else{
+    await FlutterDownloader.initialize(
+
+        debug: true // optional: set false to disable printing logs to console
+    );
+    await FlutterDownloader.registerCallback(callback);
   }
 
   runApp(MyApp());
@@ -287,11 +291,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     }
+      int AxisCount;
+      if (Platform.isIOS || Platform.isAndroid){
+        AxisCount = 2;
+      }else{
+        AxisCount = 6;
+      }
       return GridView.count(
         mainAxisSpacing: 10.0,
         shrinkWrap: true,
         padding: EdgeInsets.only(top: 10, bottom: 10),
-        crossAxisCount: 6,
+        crossAxisCount: AxisCount,
         children: List.generate(dataHomepage.length, (index) {
           print(dataHomepage[index]);
           return homepageitem(dataHomepage: dataHomepage[index],favorites: favorites,);
@@ -323,6 +333,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
   Widget getDownloads(){
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS){
+      return Container(
+        child: Center(
+          child: Text("COMING SOON ON DESKTOP!"),
+        ),
+      );
+    }
     if (animedownload.values.length < 1) {
       return Container(
         child: Center(

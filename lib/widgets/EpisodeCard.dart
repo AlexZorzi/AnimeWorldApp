@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:ui';
-import 'package:animeworldapp/pages/videopageDesktop.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:animeworldapp/pages/videopage.dart';
@@ -14,8 +12,6 @@ import 'package:hive/hive.dart';
 import 'package:animeworldapp/globals/globals.dart' as globals;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:animeworldapp/functions/favoritemanager.dart';
-import 'package:circular_custom_loader/circular_custom_loader.dart';
 
 
 
@@ -60,19 +56,22 @@ class _EpisodeCardState extends State<EpisodeCard> {
     downloadworks = Hive.box<String>("downloadworks");
     workid = downloadworks.get(widget.animeid+widget.episodeNumber);
     print(workid);
-    doiexist();
+    if (Platform.isAndroid || Platform.isAndroid ){
+      doiexist();
+      const oneSecond = const Duration(seconds: 2);
+      mytimer = Timer.periodic(oneSecond, (Timer t) => setState((){
+        if(workid != null){
+          FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
+            downloadprogress = value[0].progress
+          });
+          FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
+            downloadstatus = value[0].status
+          });
+        }
+      }));
+    }
     getProgress();
-    const oneSecond = const Duration(seconds: 2);
-    mytimer = Timer.periodic(oneSecond, (Timer t) => setState((){
-      if(workid != null){
-        FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
-          downloadprogress = value[0].progress
-        });
-        FlutterDownloader.loadTasksWithRawQuery(query: "SELECT * FROM task WHERE task_id = '${workid}'").then((value) => {
-          downloadstatus = value[0].status
-        });
-      }
-    }));
+
   }
 
 
@@ -106,7 +105,9 @@ class _EpisodeCardState extends State<EpisodeCard> {
 
   @override
   void dispose() {
-    mytimer.cancel();
+    if (Platform.isAndroid || Platform.isAndroid ) {
+      mytimer.cancel();
+    }
     super.dispose();
   }
 
@@ -171,7 +172,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
       elevation: 5,
       child: InkWell(
         splashColor: Colors.indigoAccent,
-        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayerDesktop(isNetwork: isNetwork, RawDataSource: videosource, epnumber: widget.episodeNumber, animeid: widget.animeid,refreshinfo: (){setState(() {getProgress();});},),),);},
+        onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => LandscapePlayer(isNetwork: isNetwork, RawDataSource: videosource, epnumber: widget.episodeNumber, animeid: widget.animeid,refreshinfo: (){setState(() {getProgress();});},),),);},
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Stack(children: <Widget>[
