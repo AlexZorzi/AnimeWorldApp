@@ -1,0 +1,125 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 68,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 71,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 74,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 78,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 89,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Runtime",
+			"destination" : "C:/Users/info/StudioProjects/animeworldapp/windows/out/install/x64-Debug",
+			"paths" : 
+			[
+				"runner/animeworldapp.exe"
+			],
+			"targetId" : "animeworldapp::@056c4f61b0156d1d9b06",
+			"targetIndex" : 1,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Runtime",
+			"destination" : "C:/Users/info/StudioProjects/animeworldapp/windows/out/install/x64-Debug/data",
+			"paths" : 
+			[
+				"flutter/ephemeral/icudtl.dat"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Runtime",
+			"destination" : "C:/Users/info/StudioProjects/animeworldapp/windows/out/install/x64-Debug",
+			"paths" : 
+			[
+				"flutter/ephemeral/flutter_windows.dll"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Runtime",
+			"destination" : "C:/Users/info/StudioProjects/animeworldapp/windows/out/install/x64-Debug",
+			"paths" : 
+			[
+				"out/build/x64-Debug/plugins/dart_vlc/dart_vlc_plugin.dll",
+				"out/build/x64-Debug/dart_vlc_core_packages/vlc-3.0.9.2/libvlc.dll",
+				"out/build/x64-Debug/dart_vlc_core_packages/vlc-3.0.9.2/libvlccore.dll",
+				"out/build/x64-Debug/dart_vlc_core_packages/vlc-3.0.9.2/plugins",
+				"out/build/x64-Debug/plugins/url_launcher_windows/url_launcher_windows_plugin.dll",
+				"out/build/x64-Debug/plugins/window_manager/window_manager_plugin.dll"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Runtime",
+			"type" : "code"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Runtime",
+			"destination" : "C:/Users/info/StudioProjects/animeworldapp/windows/out/install/x64-Debug/data",
+			"paths" : 
+			[
+				"C:/Users/info/StudioProjects/animeworldapp/build//flutter_assets"
+			],
+			"type" : "directory"
+		}
+	],
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	}
+}
