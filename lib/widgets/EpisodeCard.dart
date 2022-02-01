@@ -56,7 +56,6 @@ class _EpisodeCardState extends State<EpisodeCard> {
     downloadworks = Hive.box<String>("downloadworks");
     workid = downloadworks.get(widget.animeid+widget.episodeNumber);
     print(workid);
-    if (Platform.isAndroid || Platform.isAndroid ){
       doiexist();
       const oneSecond = const Duration(seconds: 2);
       mytimer = Timer.periodic(oneSecond, (Timer t) => setState((){
@@ -69,7 +68,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
           });
         }
       }));
-    }
+
     getProgress();
 
   }
@@ -119,10 +118,18 @@ class _EpisodeCardState extends State<EpisodeCard> {
       setState(() {
         videosource = widget.episodeLink;
         isNetwork = true;
-        doiexistWid = InkWell(
-          child: Icon(Icons.file_download),
-          onTap: (){pathrequest(widget.episodeLink, widget.Link.split("/")[2].split(".")[0], widget.episodeNumber);},
-        );
+        if (Platform.isAndroid || Platform.isIOS ) {
+          doiexistWid = InkWell(
+            child: Icon(Icons.file_download),
+            onTap: () {
+              pathrequest(
+                  widget.episodeLink, widget.Link.split("/")[2].split(".")[0],
+                  widget.episodeNumber);
+            },
+          );
+        }else{
+          doiexistWid = null;
+        }
       });
     }
     else{
