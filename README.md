@@ -1,4 +1,5 @@
 # AnimeWorldApp
+[![Flutter CI](https://github.com/AlexZorzi/AnimeWorldApp/actions/workflows/flutterapk.yml/badge.svg)](https://github.com/AlexZorzi/AnimeWorldApp/actions/workflows/flutterapk.yml)
 
 App Non ufficiale di AnimeWorld
 
