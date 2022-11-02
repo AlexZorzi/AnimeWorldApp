@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:expandable_text/expandable_text.dart';
@@ -26,18 +27,17 @@ class _AnimeInfoState extends State<AnimeInfo> {
   Box<Map> timestamps;
   String animeid;
   List dataInfo;
+  bool invertedSort;
 
   @override
   void initState() {
     super.initState();
     getData_Info();
-
+    invertedSort = false;
     animedownload = Hive.box<Map>("animedownload");
     timestamps = Hive.box<Map>("timestamps");
     animeid = widget.Link.split("/")[2].split(".")[0];
     const oneSecond = const Duration(seconds: 2);
-
-
   }
 
   Future<String> getData_Info() async {
@@ -121,13 +121,16 @@ class _AnimeInfoState extends State<AnimeInfo> {
         ),
       );
     }
-
-    List<EpisodeCard> cards = [];
-    for(int index = 0; index < dataInfo[5][0].length; ++index){
-      cards.add(EpisodeCard(episodeNumber: dataInfo[5][0][index][0], episodeLink: dataInfo[5][0][index][1], eparray: dataInfo[5], animeid: animeid,Link: widget.Link, Title: widget.Title, imageLink: widget.imageLink,));
+    List episodelist = List.from(dataInfo[5][0]);
+    if(invertedSort){
+      episodelist = episodelist.reversed.toList();
     }
-    return Column(
-      children: cards,
+    return ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: dataInfo[5][0].length,
+          itemBuilder: (context, index) {
+          return EpisodeCard(key:Key(episodelist[index][0]), episodeNumber: episodelist[index][0], episodeLink: episodelist[index][1], eparray: episodelist, animeid: animeid,Link: widget.Link, Title: widget.Title, imageLink: widget.imageLink,);
+        },
     );
   }
 
@@ -198,7 +201,25 @@ class _AnimeInfoState extends State<AnimeInfo> {
                           ),
                           SizedBox(height: 13.0),
                           SizedBox(height: 13.0),
-                           getList_EpisodeList(),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(onPressed: (){
+                              setState(() {
+                              invertedSort = !invertedSort;
+                            });}, icon: Icon(Icons.sort)),
+                          ),
+
+                          Row(
+                            children: <Widget>[
+
+                              Expanded(
+                                child: SizedBox(
+                                  height: 300,
+                                  child: Container(color: Colors.white,height: 1000,child: getList_EpisodeList()),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

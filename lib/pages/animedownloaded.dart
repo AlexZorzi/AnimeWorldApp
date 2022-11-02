@@ -24,6 +24,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
   Box<Map> timestamps;
   String animeid;
   List dataInfo;
+  bool invertedSort;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
     animedownload = Hive.box<Map>("animedownload");
     timestamps = Hive.box<Map>("timestamps");
     animeid = widget.Link.split("/")[2].split(".")[0];
+    invertedSort = true;
 
 
   }
@@ -108,12 +110,13 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
       sortedkeys.add(int.parse(key));
     }
     sortedkeys.sort();
-
+    if(invertedSort){
+      sortedkeys = sortedkeys.reversed.toList();
+    }
     return ListView.separated(
       itemCount: animedata["episodes"].length,
       itemBuilder: (BuildContext context, int index) {
-
-        return EpisodeCard(episodeNumber: sortedkeys[index].toString(),episodeLink: "",eparray: [],animeid: animeid,Link: widget.Link,imageLink: widget.imageLink,Title: widget.Title,callback: update,);
+        return EpisodeCard(key: Key(sortedkeys[index].toString()), episodeNumber: sortedkeys[index].toString(),episodeLink: "",eparray: [],animeid: animeid,Link: widget.Link,imageLink: widget.imageLink,Title: widget.Title,callback: update,);
       },
       separatorBuilder: (context, index) {
         return Divider();
@@ -197,6 +200,12 @@ class _AnimeDownloadDisplayState extends State<AnimeDownloadDisplay> {
                     ),
                     SizedBox(height: 13.0),
                     SizedBox(height: 13.0),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(onPressed: (){setState(() {
+                        invertedSort = !invertedSort;
+                      });}, icon: Icon(Icons.sort)),
+                    ),
                     Row(
                       children: <Widget>[
                         Expanded(
