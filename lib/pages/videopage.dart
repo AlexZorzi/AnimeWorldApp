@@ -86,7 +86,7 @@ class _LandscapePlayerState extends State<LandscapePlayer> {
         enableSubtitles: false,
         enableQualities: false,
         enableAudioTracks: false,
-        controlsHideTime: Duration(seconds: 5),
+        controlsHideTime: Duration(milliseconds: 300),
         overflowMenuCustomItems: [
           BetterPlayerOverflowMenuItem(
               Icons.picture_in_picture,
