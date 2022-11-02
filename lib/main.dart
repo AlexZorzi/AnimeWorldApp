@@ -48,7 +48,7 @@ void main() async{
 void callback(String id, DownloadTaskStatus status, int progress) {}
 
 class MyApp extends StatelessWidget {
-  static const String AppVersion = "1.1.6";
+  static const String AppVersion = "1.1.7";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
