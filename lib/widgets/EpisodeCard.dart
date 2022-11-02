@@ -212,7 +212,7 @@ class _EpisodeCardState extends State<EpisodeCard> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 190,
+                                        width: 150,
                                       ),
                                       Container(
                                         height: 30,
