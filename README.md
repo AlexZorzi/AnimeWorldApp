@@ -20,6 +20,8 @@ Guarda anime da AnimeWorld.tv senza pubblicità.
 
 
 # Contatti
-[Alz_8bit](https://t.me/alz_8bit)
+Telegram [Alz_8bit](https://t.me/alz_8bit)
 
-[Update Channel](https://t.me/animeworldapp)
+Mail [info@alexzorzi.it](mailto:info@alexzorzi.it)
+
+LinkedIn [link](https://www.linkedin.com/in/alex-zorzi-a03418240/)
