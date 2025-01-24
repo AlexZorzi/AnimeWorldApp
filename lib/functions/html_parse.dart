@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart' show parse;
 
-String ParseAWCookieTest(body_homepage){
-  var re = RegExp(r'AWCookieVerify=[^;]+;');
+String ParseAWCookieTest(String body_homepage) {
+  var re = RegExp(r'SecurityAW-gl=[^;]+;'); // Updated for the new cookie name
   var match = re.firstMatch(body_homepage);
-  if (match != null){
-    return match.group(0).replaceAll(" ", ""); // last " " breaks cookie
-  }else{
+  if (match != null) {
+    return match.group(0)!.replaceAll(" ", ""); // Remove spaces if necessary
+  } else {
     print("E: Cookie not found!");
     return null;
   }
-
 }
 
 List Parsehtml_search(html_search_api){
