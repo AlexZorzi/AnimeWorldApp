@@ -5,7 +5,7 @@ String ParseAWCookieTest(String body_homepage) {
   var re = RegExp(r'SecurityAW-gl=[^;]+;'); // Updated for the new cookie name
   var match = re.firstMatch(body_homepage);
   if (match != null) {
-    return match.group(0)!.replaceAll(" ", ""); // Remove spaces if necessary
+    return match.group(0).replaceAll(" ", ""); // Remove spaces if necessary
   } else {
     print("E: Cookie not found!");
     return null;
